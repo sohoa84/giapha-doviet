@@ -120,6 +120,7 @@ async function loadTree() {
     const familyOrder =
       await getFamilyOrder();
 
+console.log('TREE FIRST ITEM:', familyOrder[0]);
 
     // ==================================
     // TẠO MAP NGƯỜI
@@ -254,53 +255,59 @@ async function loadTree() {
 
 
     // ==================================
-    // TÌM ROOT
-    // ==================================
+// TÌM ROOT
+// ==================================
 
-    const childIds =
-      new Set();
+// Người có cha hoặc mẹ tồn tại trong dữ liệu
+// sẽ không phải root.
+//
+// Root là người không có cha/mẹ trong personMap.
+
+const roots =
+  familyOrder.filter(item => {
+
+    const person =
+      item.person;
+
+    const father =
+      person.Father;
+
+    const mother =
+      person.Mother;
+
+    const hasFather =
+      father &&
+      personMap.has(father);
+
+    const hasMother =
+      mother &&
+      personMap.has(mother);
+
+    return !hasFather && !hasMother;
+
+  });
 
 
-    familyOrder.forEach(item => {
+// ==================================
+// CHỈ GIỮ ROOT THỰC SỰ
+// ==================================
+//
+// Trong dữ liệu gia phả hiện tại,
+// chúng ta mong muốn một cây chính.
+//
+// Nếu có nhiều root do dữ liệu thiếu liên kết,
+// chọn root xuất hiện đầu tiên trong familyOrder.
 
-      const children =
-        item.person.children || [];
-
-
-      children.forEach(
-        childId => {
-
-          childIds.add(
-            childId
-          );
-
-        }
-      );
-
-    });
+const root =
+  roots.length
+    ? nodeMap.get(roots[0].person.ID)
+    : null;
 
 
-    // ==================================
-    // ROOT
-    // ==================================
-
-    treeNodes.value =
-      familyOrder
-
-        .filter(item =>
-          !childIds.has(
-            item.person.ID
-          )
-        )
-
-        .map(item =>
-          nodeMap.get(
-            item.person.ID
-          )
-        )
-
-        .filter(Boolean);
-
+treeNodes.value =
+  root
+    ? [root]
+    : [];
 
     // ==================================
     // DEBUG
