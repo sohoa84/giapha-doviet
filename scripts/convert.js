@@ -7,107 +7,164 @@ import { fileURLToPath } from "url";
 // VERSION
 // ======================================
 
-const VERSION = "3.1.1";
+const VERSION = "3.1.2";
 
 // ======================================
 // PATH
 // ======================================
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename =
+    fileURLToPath(import.meta.url);
 
-const excelFile = path.join(
-    __dirname,
-    "../data/DATA_GIAPHA.xlsx"
-);
+const __dirname =
+    path.dirname(__filename);
 
-const outputFile = path.join(
-    __dirname,
-    "../public/data/genealogy.json"
-);
+const excelFile =
+    path.join(
+        __dirname,
+        "../data/DATA_GIAPHA.xlsx"
+    );
+
+const outputFile =
+    path.join(
+        __dirname,
+        "../public/data/genealogy.json"
+    );
 
 // ======================================
 // READ EXCEL
 // ======================================
 
-const workbook = XLSX.readFile(excelFile);
+const workbook =
+    XLSX.readFile(excelFile);
 
 function readSheet(name) {
 
-    const sheet = workbook.Sheets[name];
+    const sheet =
+        workbook.Sheets[name];
 
     if (!sheet) {
-        console.warn(`⚠ Sheet ${name} không tồn tại`);
+
+        console.warn(
+            `⚠ Sheet ${name} không tồn tại`
+        );
+
         return [];
+
     }
 
-    return XLSX.utils.sheet_to_json(sheet, {
-        defval: "",
-        raw: false
-    });
+    return XLSX.utils.sheet_to_json(
+        sheet,
+        {
+            defval: "",
+            raw: false
+        }
+    );
+
 }
 
 // ======================================
 // LOAD DATA
 // ======================================
 
-const personsRaw = readSheet("PERSONS");
-const marriagesRaw = readSheet("MARRIAGES");
-const eventsRaw = readSheet("EVENTS");
-const tieusuRaw = readSheet("TIEUSU");
-const mediaRaw = readSheet("MEDIA");
+const personsRaw =
+    readSheet("PERSONS");
+
+const marriagesRaw =
+    readSheet("MARRIAGES");
+
+const eventsRaw =
+    readSheet("EVENTS");
+
+const tieusuRaw =
+    readSheet("TIEUSU");
+
+const mediaRaw =
+    readSheet("MEDIA");
 
 // ======================================
 // HELPER
 // ======================================
 
 function clean(value) {
-    return String(value ?? "").trim();
+
+    return String(
+        value ?? ""
+    ).trim();
+
 }
 
 function numberOrZero(value) {
-    const number = Number.parseInt(value, 10);
-    return Number.isFinite(number) ? number : 0;
-}
 
-function birthYear(person) {
-    return numberOrZero(person["Năm sinh"]);
+    const number =
+        Number.parseInt(
+            value,
+            10
+        );
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+
 }
 
 // ======================================
-// VALIDATION
+// START
 // ======================================
 
 console.log("");
-console.log(`Gia phả Converter v${VERSION}`);
-console.log("--------------------------------");
-console.log("Kiểm tra dữ liệu...");
+
+console.log(
+    `Gia phả Converter v${VERSION}`
+);
+
+console.log(
+    "--------------------------------"
+);
+
+console.log(
+    "Kiểm tra dữ liệu..."
+);
+
 console.log("");
 
 // ======================================
 // 1. VALIDATE PERSON IDs
 // ======================================
 
-const idSet = new Set();
+const idSet =
+    new Set();
 
-personsRaw.forEach((person, index) => {
+personsRaw.forEach(
+    (person, index) => {
 
-    const id = clean(person.ID);
+        const id =
+            clean(person.ID);
 
-    if (!id) {
-        throw new Error(
-            `PERSONS dòng ${index + 2}: thiếu ID`
-        );
+        if (!id) {
+
+            throw new Error(
+                `PERSONS dòng ${
+                    index + 2
+                }: thiếu ID`
+            );
+
+        }
+
+        if (
+            idSet.has(id)
+        ) {
+
+            throw new Error(
+                `Trùng ID trong PERSONS: ${id}`
+            );
+
+        }
+
+        idSet.add(id);
+
     }
-
-    if (idSet.has(id)) {
-        throw new Error(
-            `Trùng ID trong PERSONS: ${id}`
-        );
-    }
-
-    idSet.add(id);
-});
+);
 
 // ======================================
 // 2. BUILD PERSON MAP
@@ -115,446 +172,413 @@ personsRaw.forEach((person, index) => {
 
 const personMap = {};
 
-personsRaw.forEach(person => {
+personsRaw.forEach(
+    person => {
 
-    const id = clean(person.ID);
+        const id =
+            clean(person.ID);
 
-    // Lấy Đời trực tiếp từ Excel
-    const generation =
-        numberOrZero(person["Đời"]);
+        // Lấy Đời trực tiếp từ Excel
+        const generation =
+            numberOrZero(
+                person["Đời"]
+            );
 
-    personMap[id] = {
+        personMap[id] = {
 
-        ...person,
+            ...person,
 
-        generation,
+            // ==================================
+            // CHUẨN HÓA QUAN HỆ CHA / MẸ
+            // ==================================
 
-        parents: [],
+            Father:
+                clean(person["Cha"]),
 
-        children: [],
+            Mother:
+                clean(person["Mẹ"]),
 
-        spouses: [],
+            generation,
 
-        events: [],
+            parents: [],
 
-        media: [],
+            children: [],
 
-        biography: ""
+            spouses: [],
 
-    };
+            events: [],
 
-});
+            media: [],
+
+            biography: ""
+
+        };
+
+    }
+);
 
 // ======================================
 // 3. VALIDATE FATHER / MOTHER
 // ======================================
 
-personsRaw.forEach(person => {
+personsRaw.forEach(
+    person => {
 
-    const id = clean(person.ID);
+        const id =
+            clean(person.ID);
 
-    const father = clean(person["Cha"]);
-    const mother = clean(person["Mẹ"]);
+        const father =
+            clean(person["Cha"]);
 
-    // ----------------------------------
-    // Father
-    // ----------------------------------
+        const mother =
+            clean(person["Mẹ"]);
 
-    if (
-        father &&
-        !personMap[father]
-    ) {
+        // ----------------------------------
+        // Father
+        // ----------------------------------
 
-        console.warn(
-            `⚠ ${id} có Cha không tồn tại: ${father}`
-        );
+        if (
+            father &&
+            !personMap[father]
+        ) {
+
+            console.warn(
+                `⚠ ${id} có Cha không tồn tại: ${father}`
+            );
+
+        }
+
+        // ----------------------------------
+        // Mother
+        // ----------------------------------
+
+        if (
+            mother &&
+            !personMap[mother]
+        ) {
+
+            console.warn(
+                `⚠ ${id} có Mẹ không tồn tại: ${mother}`
+            );
+
+        }
 
     }
-
-    // ----------------------------------
-    // Mother
-    // ----------------------------------
-
-    if (
-        mother &&
-        !personMap[mother]
-    ) {
-
-        console.warn(
-            `⚠ ${id} có Mẹ không tồn tại: ${mother}`
-        );
-
-    }
-
-});
+);
 
 // ======================================
 // 4. BUILD PARENTS + CHILDREN
 // ======================================
+//
+// QUAN TRỌNG:
+//
+// children[] giữ nguyên thứ tự xuất hiện
+// trong Excel.
+//
+// Không sort theo ID.
+// Không dùng SortOrder.
+// Không dùng số .xx trong ID.
+//
 
-personsRaw.forEach(person => {
+personsRaw.forEach(
+    person => {
 
-    const childId =
-        clean(person.ID);
+        const childId =
+            clean(person.ID);
 
-    const father =
-        clean(person["Cha"]);
+        const father =
+            clean(person["Cha"]);
 
-    const mother =
-        clean(person["Mẹ"]);
+        const mother =
+            clean(person["Mẹ"]);
 
-    // ----------------------------------
-    // Father
-    // ----------------------------------
-
-    if (
-        father &&
-        personMap[father]
-    ) {
-
-        personMap[childId]
-            .parents
-            .push(father);
-
-        personMap[father]
-            .children
-            .push(childId);
-
-    }
-
-    // ----------------------------------
-    // Mother
-    // ----------------------------------
-
-    if (
-        mother &&
-        personMap[mother]
-    ) {
+        // ----------------------------------
+        // Father
+        // ----------------------------------
 
         if (
-            !personMap[childId]
-                .parents
-                .includes(mother)
+            father &&
+            personMap[father]
         ) {
 
-            personMap[childId]
-                .parents
-                .push(mother);
+            if (
+                !personMap[childId]
+                    .parents
+                    .includes(father)
+            ) {
+
+                personMap[childId]
+                    .parents
+                    .push(father);
+
+            }
+
+            if (
+                !personMap[father]
+                    .children
+                    .includes(childId)
+            ) {
+
+                personMap[father]
+                    .children
+                    .push(childId);
+
+            }
 
         }
 
-        if (
-            !personMap[mother]
-                .children
-                .includes(childId)
-        ) {
+        // ----------------------------------
+        // Mother
+        // ----------------------------------
 
+        if (
+            mother &&
             personMap[mother]
-                .children
-                .push(childId);
+        ) {
+
+            if (
+                !personMap[childId]
+                    .parents
+                    .includes(mother)
+            ) {
+
+                personMap[childId]
+                    .parents
+                    .push(mother);
+
+            }
+
+            if (
+                !personMap[mother]
+                    .children
+                    .includes(childId)
+            ) {
+
+                personMap[mother]
+                    .children
+                    .push(childId);
+
+            }
 
         }
 
     }
-
-});
-
-// ======================================
-// 5. REMOVE DUPLICATE CHILDREN
-// ======================================
-
-Object.values(personMap).forEach(person => {
-
-    person.children =
-        [...new Set(person.children)];
-
-});
+);
 
 // ======================================
-// 6. SORT CHILDREN
+// 5. BUILD MARRIAGES
 // ======================================
-//
-// Hiện tại Excel chưa có ChildNo.
-//
-// Vì vậy:
-//   1. Năm sinh
-//   2. STT trong Excel
-//
-// được dùng để sắp xếp.
-//
-// Không dùng số .xx trong mã VA để
-// quyết định thứ tự anh/chị/em.
-//
 
-Object.values(personMap).forEach(person => {
+marriagesRaw.forEach(
+    (marriage, index) => {
 
-    person.children.sort((idA, idB) => {
-
-        const childA =
-            personMap[idA];
-
-        const childB =
-            personMap[idB];
-
-        const yearA =
-            birthYear(childA);
-
-        const yearB =
-            birthYear(childB);
-
-        // Có năm sinh và khác nhau
-        if (
-            yearA > 0 &&
-            yearB > 0 &&
-            yearA !== yearB
-        ) {
-
-            return yearA - yearB;
-
-        }
-
-        // Có năm sinh, người kia không có
-        if (
-            yearA > 0 &&
-            yearB === 0
-        ) {
-
-            return -1;
-
-        }
-
-        if (
-            yearA === 0 &&
-            yearB > 0
-        ) {
-
-            return 1;
-
-        }
-
-        // Cuối cùng dùng STT Excel
-        const sttA =
-            numberOrZero(
-                childA.STT
+        const husband =
+            clean(
+                marriage.CHONG
             );
 
-        const sttB =
-            numberOrZero(
-                childB.STT
+        const wife =
+            clean(
+                marriage.VO
             );
 
-        return sttA - sttB;
+        const row =
+            index + 2;
 
-    });
-
-});
-
-// ======================================
-// 7. BUILD MARRIAGES
-// ======================================
-
-marriagesRaw.forEach((marriage, index) => {
-
-    const husband =
-        clean(marriage.CHONG);
-
-    const wife =
-        clean(marriage.VO);
-
-    const row =
-        index + 2;
-
-    // ----------------------------------
-    // Empty row
-    // ----------------------------------
-
-    if (
-        !husband &&
-        !wife
-    ) {
-
-        console.warn(
-            `⚠ MARRIAGES dòng ${row}: thiếu CHONG và VO`
-        );
-
-        return;
-
-    }
-
-    // ----------------------------------
-    // Validate husband
-    // ----------------------------------
-
-    if (
-        husband &&
-        !personMap[husband]
-    ) {
-
-        console.warn(
-            `⚠ MARRIAGES dòng ${row}: CHONG không tồn tại: ${husband}`
-        );
-
-    }
-
-    // ----------------------------------
-    // Validate wife
-    // ----------------------------------
-
-    if (
-        wife &&
-        !personMap[wife]
-    ) {
-
-        console.warn(
-            `⚠ MARRIAGES dòng ${row}: VO không tồn tại: ${wife}`
-        );
-
-    }
-
-    // ----------------------------------
-    // Husband → Wife
-    // ----------------------------------
-
-    if (
-        personMap[husband] &&
-        wife &&
-        personMap[wife]
-    ) {
+        // ----------------------------------
+        // Empty row
+        // ----------------------------------
 
         if (
+            !husband &&
+            !wife
+        ) {
+
+            console.warn(
+                `⚠ MARRIAGES dòng ${row}: thiếu CHONG và VO`
+            );
+
+            return;
+
+        }
+
+        // ----------------------------------
+        // Validate husband
+        // ----------------------------------
+
+        if (
+            husband &&
             !personMap[husband]
-                .spouses
-                .includes(wife)
         ) {
 
-            personMap[husband]
-                .spouses
-                .push(wife);
+            console.warn(
+                `⚠ MARRIAGES dòng ${row}: CHONG không tồn tại: ${husband}`
+            );
 
         }
 
-    }
-
-    // ----------------------------------
-    // Wife → Husband
-    // ----------------------------------
-
-    if (
-        personMap[wife] &&
-        husband &&
-        personMap[husband]
-    ) {
+        // ----------------------------------
+        // Validate wife
+        // ----------------------------------
 
         if (
+            wife &&
             !personMap[wife]
-                .spouses
-                .includes(husband)
         ) {
 
+            console.warn(
+                `⚠ MARRIAGES dòng ${row}: VO không tồn tại: ${wife}`
+            );
+
+        }
+
+        // ----------------------------------
+        // Husband → Wife
+        // ----------------------------------
+
+        if (
+            personMap[husband] &&
+            wife &&
             personMap[wife]
-                .spouses
-                .push(husband);
+        ) {
+
+            if (
+                !personMap[husband]
+                    .spouses
+                    .includes(wife)
+            ) {
+
+                personMap[husband]
+                    .spouses
+                    .push(wife);
+
+            }
+
+        }
+
+        // ----------------------------------
+        // Wife → Husband
+        // ----------------------------------
+
+        if (
+            personMap[wife] &&
+            husband &&
+            personMap[husband]
+        ) {
+
+            if (
+                !personMap[wife]
+                    .spouses
+                    .includes(husband)
+            ) {
+
+                personMap[wife]
+                    .spouses
+                    .push(husband);
+
+            }
 
         }
 
     }
-
-});
+);
 
 // ======================================
-// 8. BIOGRAPHY
+// 6. BIOGRAPHY
 // ======================================
 
-tieusuRaw.forEach(item => {
+tieusuRaw.forEach(
+    item => {
 
-    const id =
-        clean(
-            item.ID ||
-            item.PersonID
-        );
+        const id =
+            clean(
+                item.ID ||
+                item.PersonID
+            );
 
-    if (
-        id &&
-        personMap[id]
-    ) {
+        if (
+            id &&
+            personMap[id]
+        ) {
 
-        personMap[id].biography =
-            item.Biography ||
-            item.Tieusu ||
-            item.Content ||
-            "";
+            personMap[id]
+                .biography =
+                item.Biography ||
+                item.Tieusu ||
+                item.Content ||
+                "";
+
+        }
 
     }
-
-});
+);
 
 // ======================================
-// 9. EVENTS
+// 7. EVENTS
 // ======================================
 
-eventsRaw.forEach(event => {
+eventsRaw.forEach(
+    event => {
+
+        const personId =
+            clean(
+                event.PersonID ||
+                event.ID
+            );
+
+        if (
+            personId &&
+            personMap[personId]
+        ) {
+
+            personMap[personId]
+                .events
+                .push(event);
+
+        }
+
+    }
+);
+
+// ======================================
+// 8. MEDIA
+// ======================================
+mediaRaw.forEach(m => {
 
     const personId =
-        clean(
-            event.PersonID ||
-            event.ID
-        );
+        String(m.PERSONID || "").trim();
 
     if (
         personId &&
         personMap[personId]
     ) {
 
-        personMap[personId]
-            .events
-            .push(event);
+        personMap[personId].media.push(m);
 
     }
 
 });
 
 // ======================================
-// 10. MEDIA
-// ======================================
-
-mediaRaw.forEach(media => {
-
-    const personId =
-        clean(
-            media.PersonID ||
-            media.ID
-        );
-
-    if (
-        personId &&
-        personMap[personId]
-    ) {
-
-        personMap[personId]
-            .media
-            .push(media);
-
-    }
-
-});
-
-// ======================================
-// 11. PERSON ARRAY
+// 9. PERSON ARRAY
 // ======================================
 
 const persons =
-    Object.values(personMap);
+    Object.values(
+        personMap
+    );
 
 // ======================================
-// 12. GENERATIONS
+// 10. GENERATIONS
 // ======================================
 
 const generations =
     [
         ...new Set(
             persons
-                .map(person =>
-                    person.generation
+                .map(
+                    person =>
+                        person.generation
                 )
                 .filter(
                     generation =>
@@ -567,23 +591,26 @@ const generations =
     );
 
 // ======================================
-// 13. LIVING / DECEASED
+// 11. LIVING / DECEASED
 // ======================================
 
 const living =
-    persons.filter(person => {
+    persons.filter(
+        person => {
 
-        return !clean(
-            person["Năm mất"]
-        );
+            return !clean(
+                person["Năm mất"]
+            );
 
-    }).length;
+        }
+    ).length;
 
 const deceased =
-    persons.length - living;
+    persons.length -
+    living;
 
 // ======================================
-// 14. STATISTICS
+// 12. STATISTICS
 // ======================================
 
 const stats = {
@@ -613,7 +640,7 @@ const stats = {
 };
 
 // ======================================
-// 15. GENEALOGY OBJECT
+// 13. GENEALOGY OBJECT
 // ======================================
 
 const genealogy = {
@@ -624,7 +651,8 @@ const genealogy = {
             VERSION,
 
         generated:
-            new Date().toISOString()
+            new Date()
+                .toISOString()
 
     },
 
@@ -637,14 +665,18 @@ const genealogy = {
 };
 
 // ======================================
-// 16. CREATE OUTPUT DIRECTORY
+// 14. CREATE OUTPUT DIRECTORY
 // ======================================
 
 const outputDir =
-    path.dirname(outputFile);
+    path.dirname(
+        outputFile
+    );
 
 if (
-    !fs.existsSync(outputDir)
+    !fs.existsSync(
+        outputDir
+    )
 ) {
 
     fs.mkdirSync(
@@ -657,7 +689,7 @@ if (
 }
 
 // ======================================
-// 17. WRITE JSON
+// 15. WRITE JSON
 // ======================================
 
 fs.writeFileSync(
@@ -679,15 +711,49 @@ fs.writeFileSync(
 // ======================================
 
 console.log("");
-console.log("================================");
-console.log("✓ genealogy.json created");
-console.log(`Version     : ${VERSION}`);
-console.log(`Persons     : ${persons.length}`);
-console.log(`Living      : ${living}`);
-console.log(`Deceased    : ${deceased}`);
-console.log(`Marriages   : ${marriagesRaw.length}`);
-console.log(`Events      : ${eventsRaw.length}`);
-console.log(`Media       : ${mediaRaw.length}`);
-console.log(`Generations : ${generations.length}`);
-console.log("================================");
+
+console.log(
+    "================================"
+);
+
+console.log(
+    "✓ genealogy.json created"
+);
+
+console.log(
+    `Version     : ${VERSION}`
+);
+
+console.log(
+    `Persons     : ${persons.length}`
+);
+
+console.log(
+    `Living      : ${living}`
+);
+
+console.log(
+    `Deceased    : ${deceased}`
+);
+
+console.log(
+    `Marriages   : ${marriagesRaw.length}`
+);
+
+console.log(
+    `Events      : ${eventsRaw.length}`
+);
+
+console.log(
+    `Media       : ${mediaRaw.length}`
+);
+
+console.log(
+    `Generations : ${generations.length}`
+);
+
+console.log(
+    "================================"
+);
+
 console.log("");
