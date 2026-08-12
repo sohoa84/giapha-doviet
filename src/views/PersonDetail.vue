@@ -217,7 +217,8 @@
 import {
   ref,
   computed,
-  onMounted
+  onMounted,
+  watch
 } from 'vue';
 
 import {
@@ -353,6 +354,17 @@ async function loadPerson() {
 
 onMounted(
   loadPerson
+);
+
+// ======================================
+// WATCH PERSON ID
+// ======================================
+
+watch(
+  () => route.params.id,
+  () => {
+    loadPerson();
+  }
 );
 
 </script>

@@ -1,7 +1,10 @@
 <template>
 
-  <router-link
-    :to="`/nguoi/${person.ID}`"
+   <router-link
+    :to="{
+      name: 'person-detail',
+      params: { id: person.ID }
+    }"
     class="text-decoration-none"
   >
 
