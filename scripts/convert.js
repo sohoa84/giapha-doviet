@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 // VERSION
 // ======================================
 
-const VERSION = "3.1.2";
+const VERSION = "3.2.0";
 
 // ======================================
 // PATH
@@ -477,6 +477,169 @@ marriagesRaw.forEach(
                     .push(husband);
 
             }
+
+        }
+
+    }
+);
+
+// ======================================
+// 5B. AUTO BUILD SPOUSES FROM ID
+// ======================================
+//
+// QUY ƯỚC:
+//
+// VA-10.02S1
+// VA-10.02S2
+// ...
+//
+// được hiểu là vợ/chồng của:
+//
+// VA-10.02
+//
+// Điều kiện:
+// - ID kết thúc bằng S + số
+// - Cha trống
+// - Mẹ trống
+//
+// Sheet MARRIAGES vẫn được xử lý ở bước 5.
+// Phần này chỉ bổ sung quan hệ còn thiếu,
+// không tạo duplicate.
+//
+
+personsRaw.forEach(
+    person => {
+
+        const spouseId =
+            clean(person.ID);
+
+        if (!spouseId) {
+            return;
+        }
+
+
+        // ==================================
+        // KIỂM TRA ID DẠNG S1 / S2 / S3...
+        //
+        // VA-6.06S1
+        // → baseId = VA-6.06
+        // ==================================
+
+        const match =
+            spouseId.match(
+                /^(.+)S(\d+)$/
+            );
+
+        if (!match) {
+            return;
+        }
+
+
+        // ==================================
+        // CHỈ COI LÀ DÂU / RỂ
+        // KHI CHA VÀ MẸ ĐỀU TRỐNG
+        // ==================================
+
+        const father =
+            clean(
+                person["Cha"]
+            );
+
+        const mother =
+            clean(
+                person["Mẹ"]
+            );
+
+
+        if (
+            father ||
+            mother
+        ) {
+
+            return;
+
+        }
+
+
+        // ==================================
+        // LẤY ID NGƯỜI GỐC
+        //
+        // VA-6.06S1
+        // → VA-6.06
+        // ==================================
+
+        const baseId =
+            match[1];
+
+
+        // ==================================
+        // NGƯỜI GỐC PHẢI TỒN TẠI
+        // ==================================
+
+        if (
+            !personMap[baseId]
+        ) {
+
+            console.warn(
+                `⚠ ${spouseId}: không tìm thấy người gốc ${baseId}`
+            );
+
+            return;
+
+        }
+
+
+        // ==================================
+        // SPOUSE PHẢI TỒN TẠI
+        // ==================================
+
+        if (
+            !personMap[spouseId]
+        ) {
+
+            return;
+
+        }
+
+
+        // ==================================
+        // NGƯỜI GỐC → VỢ / CHỒNG
+        //
+        // VA-6.06
+        // spouses:
+        // ["VA-6.06S1"]
+        // ==================================
+
+        if (
+            !personMap[baseId]
+                .spouses
+                .includes(spouseId)
+        ) {
+
+            personMap[baseId]
+                .spouses
+                .push(spouseId);
+
+        }
+
+
+        // ==================================
+        // VỢ / CHỒNG → NGƯỜI GỐC
+        //
+        // VA-6.06S1
+        // spouses:
+        // ["VA-6.06"]
+        // ==================================
+
+        if (
+            !personMap[spouseId]
+                .spouses
+                .includes(baseId)
+        ) {
+
+            personMap[spouseId]
+                .spouses
+                .push(baseId);
 
         }
 
