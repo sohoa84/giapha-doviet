@@ -1,7 +1,7 @@
 <template>
 
   <!-- Tiêu đề -->
-
+<div class="container py-5">
   <div class="mb-4">
 
     <h1 class="fw-bold">
@@ -185,7 +185,7 @@
     </div>
 
   </div>
-
+</div>
 </template>
 
 

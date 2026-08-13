@@ -5,6 +5,7 @@
       <nav>
         <router-link to="/">Trang chủ</router-link>
         <router-link to="/tree">Cây gia phả</router-link>
+        <router-link to="/generation-tree">Cây thế hệ</router-link>
         <router-link to="/members">Thành viên</router-link>
         <router-link to="/about">Giới thiệu</router-link>
       </nav>
