@@ -176,10 +176,6 @@
       <div
         ref="treeViewport"
         class="tree-viewport"
-        @touchstart="handleTouchStart"
-        @touchmove.prevent="handleTouchMove"
-        @touchend="handleTouchEnd"
-        @touchcancel="handleTouchEnd"
       >
 
         <div
@@ -214,7 +210,7 @@
         </span>
 
         <span>
-          🔍 Dùng + / −, ⤢ hoặc chụm 2 ngón tay để zoom
+          🔍 Dùng + / − hoặc ⤢ để vừa màn hình
         </span>
 
         <span>
@@ -306,7 +302,7 @@ function zoomIn() {
 
   scale.value =
     Math.min(
-      MAX_SCALE,
+      1.5,
       Number(
         (scale.value + 0.1).toFixed(2)
       )
@@ -422,373 +418,6 @@ function handleResize() {
 
   if (isMobileView()) {
     fitToScreen();
-  }
-
-}
-
-
-// ======================================
-// TOUCH: KÉO 1 NGÓN + PINCH TO ZOOM 2 NGÓN
-// ======================================
-
-const MIN_SCALE = 0.22;
-const MAX_SCALE = 1.5;
-
-let touchMode = null;
-
-let panStartX = 0;
-let panStartY = 0;
-let panStartScrollLeft = 0;
-let panStartScrollTop = 0;
-
-let pinchStartDistance = 0;
-let pinchStartScale = 1;
-let pinchStartMidX = 0;
-let pinchStartMidY = 0;
-let pinchStartScrollLeft = 0;
-let pinchStartScrollTop = 0;
-
-
-function getTouchDistance(touches) {
-
-  if (!touches || touches.length < 2) {
-    return 0;
-  }
-
-  const dx =
-    touches[0].clientX -
-    touches[1].clientX;
-
-  const dy =
-    touches[0].clientY -
-    touches[1].clientY;
-
-  return Math.hypot(dx, dy);
-
-}
-
-
-function getTouchMidpoint(touches) {
-
-  if (!touches || touches.length < 2) {
-
-    return {
-      x: 0,
-      y: 0
-    };
-
-  }
-
-  return {
-    x:
-      (
-        touches[0].clientX +
-        touches[1].clientX
-      ) / 2,
-
-    y:
-      (
-        touches[0].clientY +
-        touches[1].clientY
-      ) / 2
-  };
-
-}
-
-
-function clampScale(value) {
-
-  return Math.max(
-    MIN_SCALE,
-    Math.min(
-      MAX_SCALE,
-      value
-    )
-  );
-
-}
-
-
-function startPan(touch) {
-
-  const viewport =
-    treeViewport.value;
-
-  if (!viewport || !touch) {
-    return;
-  }
-
-  touchMode = 'pan';
-
-  panStartX =
-    touch.clientX;
-
-  panStartY =
-    touch.clientY;
-
-  panStartScrollLeft =
-    viewport.scrollLeft;
-
-  panStartScrollTop =
-    viewport.scrollTop;
-
-}
-
-
-function startPinch(touches) {
-
-  const viewport =
-    treeViewport.value;
-
-  if (
-    !viewport ||
-    !touches ||
-    touches.length < 2
-  ) {
-    return;
-  }
-
-  touchMode = 'pinch';
-
-  pinchStartDistance =
-    getTouchDistance(touches);
-
-  pinchStartScale =
-    scale.value;
-
-  const midpoint =
-    getTouchMidpoint(touches);
-
-  const rect =
-    viewport.getBoundingClientRect();
-
-  pinchStartMidX =
-    midpoint.x -
-    rect.left;
-
-  pinchStartMidY =
-    midpoint.y -
-    rect.top;
-
-  pinchStartScrollLeft =
-    viewport.scrollLeft;
-
-  pinchStartScrollTop =
-    viewport.scrollTop;
-
-}
-
-
-function handleTouchStart(event) {
-
-  if (!isMobileView()) {
-    return;
-  }
-
-  if (event.touches.length >= 2) {
-
-    startPinch(
-      event.touches
-    );
-
-    return;
-  }
-
-  if (event.touches.length === 1) {
-
-    startPan(
-      event.touches[0]
-    );
-
-  }
-
-}
-
-
-function handleTouchMove(event) {
-
-  if (!isMobileView()) {
-    return;
-  }
-
-  const viewport =
-    treeViewport.value;
-
-  if (!viewport) {
-    return;
-  }
-
-
-  // ==================================
-  // PINCH 2 NGÓN
-  // ==================================
-
-  if (event.touches.length >= 2) {
-
-    if (touchMode !== 'pinch') {
-
-      startPinch(
-        event.touches
-      );
-
-    }
-
-    const currentDistance =
-      getTouchDistance(
-        event.touches
-      );
-
-    if (
-      !pinchStartDistance ||
-      !currentDistance
-    ) {
-      return;
-    }
-
-    const zoomRatio =
-      currentDistance /
-      pinchStartDistance;
-
-    const oldScale =
-      scale.value;
-
-    const newScale =
-      clampScale(
-        pinchStartScale *
-        zoomRatio
-      );
-
-    if (
-      Math.abs(
-        newScale -
-        oldScale
-      ) < 0.002
-    ) {
-      return;
-    }
-
-    const midpoint =
-      getTouchMidpoint(
-        event.touches
-      );
-
-    const rect =
-      viewport.getBoundingClientRect();
-
-    const currentMidX =
-      midpoint.x -
-      rect.left;
-
-    const currentMidY =
-      midpoint.y -
-      rect.top;
-
-    /*
-      Giữ vùng đang nằm giữa hai ngón tay
-      gần như cố định khi zoom.
-    */
-    const contentX =
-      (
-        pinchStartScrollLeft +
-        pinchStartMidX
-      ) /
-      pinchStartScale;
-
-    const contentY =
-      (
-        pinchStartScrollTop +
-        pinchStartMidY
-      ) /
-      pinchStartScale;
-
-    scale.value =
-      Number(
-        newScale.toFixed(3)
-      );
-
-    viewport.scrollLeft =
-      Math.max(
-        0,
-        contentX *
-        scale.value -
-        currentMidX
-      );
-
-    viewport.scrollTop =
-      Math.max(
-        0,
-        contentY *
-        scale.value -
-        currentMidY
-      );
-
-    return;
-
-  }
-
-
-  // ==================================
-  // KÉO 1 NGÓN
-  // ==================================
-
-  if (event.touches.length === 1) {
-
-    if (touchMode !== 'pan') {
-
-      startPan(
-        event.touches[0]
-      );
-
-    }
-
-    const touch =
-      event.touches[0];
-
-    const deltaX =
-      touch.clientX -
-      panStartX;
-
-    const deltaY =
-      touch.clientY -
-      panStartY;
-
-    viewport.scrollLeft =
-      panStartScrollLeft -
-      deltaX;
-
-    viewport.scrollTop =
-      panStartScrollTop -
-      deltaY;
-
-  }
-
-}
-
-
-function handleTouchEnd(event) {
-
-  if (!isMobileView()) {
-    return;
-  }
-
-  /*
-    Nếu từ pinch còn lại 1 ngón,
-    chuyển ngay về chế độ kéo 1 ngón.
-  */
-  if (event.touches.length === 1) {
-
-    startPan(
-      event.touches[0]
-    );
-
-    return;
-
-  }
-
-  if (event.touches.length === 0) {
-
-    touchMode = null;
-
   }
 
 }
@@ -1282,10 +911,6 @@ onUnmounted(() => {
   cursor: grabbing;
 }
 
-.tree-viewport {
-  -webkit-tap-highlight-color: transparent;
-}
-
 
 /* ===================================== */
 /* CANVAS */
@@ -1417,9 +1042,7 @@ onUnmounted(() => {
   .tree-viewport {
     height: 72vh;
     min-height: 520px;
-    touch-action: none;
-    user-select: none;
-    -webkit-user-select: none;
+    touch-action: pan-x pan-y;
   }
 
   .tree-canvas {
