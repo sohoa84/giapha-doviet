@@ -80,88 +80,101 @@
             🌳 Sơ đồ gia phả
           </span>
 
-          <button
-            type="button"
-            class="spouse-toggle"
-            :class="{ active: showSpouses }"
-            @click="showSpouses = !showSpouses"
-            :title="
-              showSpouses
-                ? 'Ẩn dâu / rể'
-                : 'Hiện dâu / rể'
-            "
-          >
-
-            <i
-              class="bi"
-              :class="
-                showSpouses
-                  ? 'bi-people-fill'
-                  : 'bi-person-fill'
-              "
-            ></i>
-
-            <span class="spouse-label-desktop">
-              {{
-                showSpouses
-                  ? 'Đang hiện dâu / rể'
-                  : 'Đang ẩn dâu / rể'
-              }}
-            </span>
-
-            <span class="spouse-label-mobile">
-              Dâu/rể
-            </span>
-
-          </button>
-
         </div>
+
+
+<!-- TREE CONTROLS -->
+
+<div class="tree-controls mb-3">
+
+  <button
+    type="button"
+    class="btn"
+    :class="
+      showSpouses
+        ? 'btn-primary'
+        : 'btn-outline-secondary'
+    "
+    @click="showSpouses = !showSpouses"
+  >
+
+    <i
+      class="bi"
+      :class="
+        showSpouses
+          ? 'bi-people-fill'
+          : 'bi-person-fill'
+      "
+    ></i>
+
+    {{ showSpouses
+      ? 'Đang hiển thị dâu / rể'
+      : 'Đang ẩn dâu / rể'
+    }}
+
+  </button>
+
+</div>
+
+
 
 
         <div class="toolbar-controls">
 
+          <!-- Zoom out -->
+
           <button
             class="tree-btn"
             title="Thu nhỏ"
-            aria-label="Thu nhỏ cây"
             @click="zoomOut"
           >
             −
           </button>
 
+
+          <!-- Zoom -->
+
           <button
             class="zoom-value"
-            title="Đặt lại mức thu phóng"
+            title="Đặt lại 100%"
             @click="resetZoom"
           >
             {{ Math.round(scale * 100) }}%
           </button>
 
+
+          <!-- Zoom in -->
+
           <button
             class="tree-btn"
             title="Phóng to"
-            aria-label="Phóng to cây"
             @click="zoomIn"
           >
             +
           </button>
 
-          <button
-            class="tree-btn fit-btn"
-            title="Vừa màn hình"
-            aria-label="Thu cây vừa màn hình"
-            @click="fitToScreen"
-          >
-            ⤢
-          </button>
+
+          <!-- Reset -->
 
           <button
-            class="tree-btn fullscreen-btn"
+            class="tree-btn tree-reset"
+            title="Đặt lại kích thước"
+            @click="resetZoom"
+          >
+            ↺
+          </button>
+
+
+          <!-- Fullscreen -->
+
+          <button
+            class="tree-btn"
             title="Toàn màn hình"
-            aria-label="Bật hoặc tắt toàn màn hình"
             @click="toggleFullscreen"
           >
-            ⛶
+
+            {{ isFullscreen ? '⛶' : '⛶' }}
+
           </button>
 
         </div>
@@ -179,7 +192,6 @@
       >
 
         <div
-          ref="treeCanvas"
           class="tree-canvas"
           :style="{
             transform: `scale(${scale})`,
@@ -206,11 +218,11 @@
       <div class="tree-help">
 
         <span>
-          ↔️ Kéo ngang/dọc để xem cây
+          🖱️ Kéo ngang/dọc để xem cây
         </span>
 
         <span>
-          🔍 Dùng + / − hoặc ⤢ để vừa màn hình
+          🔍 Dùng + / − để thu phóng
         </span>
 
         <span>
@@ -230,7 +242,6 @@
 
 import {
   ref,
-  nextTick,
   onMounted,
   onUnmounted
 } from 'vue';
@@ -264,33 +275,6 @@ const showSpouses =
 
 
 // ======================================
-// VIEWPORT / MOBILE
-// ======================================
-
-const treeViewport =
-  ref(null);
-
-const treeCanvas =
-  ref(null);
-
-
-function isMobileView() {
-
-  return window.innerWidth <= 768;
-
-}
-
-
-function defaultScale() {
-
-  return isMobileView()
-    ? 0.5
-    : 0.85;
-
-}
-
-
-// ======================================
 // ZOOM
 // ======================================
 
@@ -303,9 +287,7 @@ function zoomIn() {
   scale.value =
     Math.min(
       1.5,
-      Number(
-        (scale.value + 0.1).toFixed(2)
-      )
+      scale.value + 0.1
     );
 
 }
@@ -315,110 +297,16 @@ function zoomOut() {
 
   scale.value =
     Math.max(
-      0.18,
-      Number(
-        (scale.value - 0.1).toFixed(2)
-      )
+      0.3,
+      scale.value - 0.1
     );
 
 }
 
 
-async function centerTree() {
+function resetZoom() {
 
-  await nextTick();
-
-  const viewport =
-    treeViewport.value;
-
-  const canvas =
-    treeCanvas.value;
-
-  if (!viewport || !canvas) {
-    return;
-  }
-
-  const scaledWidth =
-    canvas.scrollWidth *
-    scale.value;
-
-  viewport.scrollLeft =
-    Math.max(
-      0,
-      (
-        scaledWidth -
-        viewport.clientWidth
-      ) / 2
-    );
-
-  viewport.scrollTop = 0;
-
-}
-
-
-async function resetZoom() {
-
-  scale.value =
-    defaultScale();
-
-  await centerTree();
-
-}
-
-
-async function fitToScreen() {
-
-  await nextTick();
-
-  const viewport =
-    treeViewport.value;
-
-  const canvas =
-    treeCanvas.value;
-
-  if (!viewport || !canvas) {
-    return;
-  }
-
-  const naturalWidth =
-    canvas.scrollWidth;
-
-  if (!naturalWidth) {
-    return;
-  }
-
-  const availableWidth =
-    Math.max(
-      200,
-      viewport.clientWidth - 24
-    );
-
-  const fittedScale =
-    availableWidth /
-    naturalWidth;
-
-  scale.value =
-    Math.max(
-      0.18,
-      Math.min(
-        isMobileView()
-          ? 0.62
-          : 1,
-        fittedScale
-      )
-    );
-
-  await nextTick();
-  await centerTree();
-
-}
-
-
-function handleResize() {
-
-  if (isMobileView()) {
-    fitToScreen();
-  }
+  scale.value = 0.85;
 
 }
 
@@ -642,21 +530,6 @@ treeNodes.value =
 
 
 // ==================================
-// CĂN CÂY CHO MÀN HÌNH
-// ==================================
-
-    await nextTick();
-
-    if (isMobileView()) {
-      await fitToScreen();
-    }
-    else {
-      scale.value = 0.85;
-      await centerTree();
-    }
-
-
-// ==================================
 // DEBUG
 // ==================================
 
@@ -714,11 +587,6 @@ onMounted(() => {
     handleEscape
   );
 
-  window.addEventListener(
-    'resize',
-    handleResize
-  );
-
 });
 
 
@@ -727,11 +595,6 @@ onUnmounted(() => {
   window.removeEventListener(
     'keydown',
     handleEscape
-  );
-
-  window.removeEventListener(
-    'resize',
-    handleResize
   );
 
 });
@@ -746,8 +609,9 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-page {
+
   width: 100%;
-  min-width: 0;
+
 }
 
 
@@ -756,9 +620,13 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-header {
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
 }
 
 
@@ -767,10 +635,16 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-wrapper {
+
   background: #ffffff;
-  border: 1px solid #dee2e6;
+
+  border:
+    1px solid #dee2e6;
+
   border-radius: 12px;
+
   overflow: hidden;
+
 }
 
 
@@ -779,11 +653,17 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-wrapper.fullscreen {
+
   position: fixed;
+
   inset: 0;
+
   z-index: 9999;
+
   border-radius: 0;
+
   background: #ffffff;
+
 }
 
 
@@ -792,102 +672,136 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-toolbar {
-  min-height: 56px;
+
+  height: 54px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
-  gap: 10px;
-  padding: 8px 12px;
+
+  padding:
+    0 15px;
+
   background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+
+  border-bottom:
+    1px solid #dee2e6;
+
 }
 
-.toolbar-left {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
 .tree-title {
-  white-space: nowrap;
-  font-weight: 700;
-  color: #495057;
-}
 
-
-/* ===================================== */
-/* SPOUSE TOGGLE */
-/* ===================================== */
-
-.spouse-toggle {
-  height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 10px;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #495057;
-  font-size: 0.82rem;
   font-weight: 600;
-  cursor: pointer;
-}
 
-.spouse-toggle.active {
-  border-color: #0d6efd;
-  background: #0d6efd;
-  color: #ffffff;
-}
+  color: #495057;
 
-.spouse-label-mobile {
-  display: none;
 }
-
 
 /* ===================================== */
-/* ZOOM CONTROLS */
+/* TREE CONTROLS */
+/* ===================================== */
+
+.tree-controls {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+
+.tree-controls .btn {
+
+  border-radius: 8px;
+
+  font-size: 0.9rem;
+
+  font-weight: 600;
+
+  padding: 7px 14px;
+
+}
+
+
+.tree-controls .bi {
+
+  margin-right: 5px;
+
+}
+
+/* ===================================== */
+/* CONTROLS */
 /* ===================================== */
 
 .toolbar-controls {
+
   display: flex;
+
   align-items: center;
+
   gap: 5px;
-  flex-shrink: 0;
+
 }
+
 
 .tree-btn,
 .zoom-value {
-  height: 36px;
-  min-width: 36px;
-  border: 1px solid #ced4da;
+
+  height: 34px;
+
+  min-width: 34px;
+
+  border:
+    1px solid #ced4da;
+
   background: #ffffff;
-  color: #343a40;
-  border-radius: 8px;
+
+  border-radius: 6px;
+
   cursor: pointer;
-  display: inline-flex;
+
+  display: flex;
+
   align-items: center;
+
   justify-content: center;
-  font-size: 17px;
-  line-height: 1;
+
+  font-size: 16px;
+
   transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
+    background 0.15s ease;
+
 }
+
 
 .tree-btn:hover,
 .zoom-value:hover {
+
   background: #e9ecef;
-  border-color: #adb5bd;
+
 }
 
+
 .zoom-value {
-  min-width: 56px;
-  padding: 0 7px;
-  font-size: 12px;
-  font-weight: 700;
+
+  min-width: 55px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+}
+
+
+.tree-reset {
+
+  margin-left: 5px;
+
 }
 
 
@@ -896,19 +810,27 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-viewport {
+
   width: 100%;
+
   height: 70vh;
+
   min-height: 500px;
+
   overflow: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  background: #f8f9fa;
+
+  background:
+    #f8f9fa;
+
   cursor: grab;
-  scrollbar-gutter: stable;
+
 }
 
+
 .tree-viewport:active {
+
   cursor: grabbing;
+
 }
 
 
@@ -917,13 +839,18 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-canvas {
+
   display: inline-flex;
+
   flex-direction: column;
+
   align-items: center;
+
   min-width: max-content;
-  padding: 50px 80px 100px;
-  will-change: transform;
-  transition: transform 0.12s ease-out;
+
+  padding:
+    50px 80px 100px;
+
 }
 
 
@@ -932,15 +859,27 @@ onUnmounted(() => {
 /* ===================================== */
 
 .tree-help {
+
   display: flex;
+
   justify-content: center;
+
   flex-wrap: wrap;
+
   gap: 20px;
-  padding: 9px 15px;
+
+  padding:
+    9px 15px;
+
   font-size: 12px;
+
   color: #6c757d;
+
   background: #ffffff;
-  border-top: 1px solid #dee2e6;
+
+  border-top:
+    1px solid #dee2e6;
+
 }
 
 
@@ -949,8 +888,10 @@ onUnmounted(() => {
 /* ===================================== */
 
 .fullscreen .tree-viewport {
-  height: calc(100vh - 56px);
-  min-height: 0;
+
+  height:
+    calc(100vh - 90px);
+
 }
 
 
@@ -960,148 +901,40 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
 
-  .tree-page {
-    margin-left: -8px;
-    margin-right: -8px;
-    width: calc(100% + 16px);
-  }
-
-  .tree-header {
-    margin-bottom: 10px !important;
-    padding: 0 8px;
-  }
-
-  .tree-header h2 {
-    font-size: 1.25rem;
-  }
-
-  .tree-header p {
-    font-size: 0.82rem;
-    line-height: 1.35;
-  }
-
-  .tree-wrapper {
-    border-radius: 10px;
-  }
-
   .tree-toolbar {
-    min-height: 54px;
-    gap: 6px;
-    padding: 7px 6px;
+
+    padding:
+      0 8px;
+
   }
 
-  .toolbar-left {
-    gap: 5px;
-  }
 
   .tree-title {
-    display: none;
-  }
 
-  .spouse-toggle {
-    height: 36px;
-    min-width: 42px;
-    padding: 0 8px;
-    border-radius: 8px;
-    font-size: 0.72rem;
-  }
-
-  .spouse-toggle .bi {
     font-size: 14px;
+
   }
 
-  .spouse-label-desktop {
-    display: none;
-  }
-
-  .spouse-label-mobile {
-    display: inline;
-  }
-
-  .toolbar-controls {
-    gap: 3px;
-  }
-
-  .tree-btn,
-  .zoom-value {
-    height: 36px;
-    min-width: 36px;
-    border-radius: 8px;
-  }
-
-  .zoom-value {
-    min-width: 48px;
-    padding: 0 4px;
-    font-size: 11px;
-  }
-
-  .fullscreen-btn {
-    display: none;
-  }
 
   .tree-viewport {
-    height: 72vh;
-    min-height: 520px;
-    touch-action: pan-x pan-y;
+
+    height: 65vh;
+
   }
+
 
   .tree-canvas {
-    padding: 28px 18px 70px;
-    transform-origin: top center !important;
+
+    padding:
+      30px 30px 80px;
+
   }
+
 
   .tree-help {
+
     display: none;
-  }
 
-}
-
-
-/* ===================================== */
-/* MOBILE NHỎ */
-/* ===================================== */
-
-@media (max-width: 390px) {
-
-  .spouse-label-mobile {
-    display: none;
-  }
-
-  .spouse-toggle {
-    min-width: 36px;
-    padding: 0 6px;
-  }
-
-  .tree-btn,
-  .zoom-value {
-    height: 34px;
-    min-width: 34px;
-  }
-
-  .zoom-value {
-    min-width: 44px;
-  }
-
-  .tree-viewport {
-    height: 74vh;
-  }
-
-}
-
-
-/* ===================================== */
-/* LANDSCAPE MOBILE */
-/* ===================================== */
-
-@media (max-width: 900px) and (orientation: landscape) {
-
-  .tree-header {
-    display: none;
-  }
-
-  .tree-viewport {
-    height: calc(100vh - 58px);
-    min-height: 0;
   }
 
 }

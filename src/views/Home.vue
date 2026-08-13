@@ -121,8 +121,8 @@
 
         <router-link to="/about" class="quick-card">
           <span class="quick-icon">🏮</span>
-          <strong>Về Vĩnh An</strong>
-          <small>Câu chuyện và nguồn cội</small>
+          <strong>Về Nguyễn Xuân</strong>
+          <small>Nội quy Gia tộc Nguyễn Xuân Vĩnh An</small>
         </router-link>
       </section>
 
@@ -133,7 +133,7 @@
         <div class="section-heading">
           <div>
             <span class="eyebrow">TỔNG QUAN</span>
-            <h2>Gia phả Vĩnh An</h2>
+            <h2>Gia phả Chi Vĩnh An</h2>
           </div>
         </div>
 
