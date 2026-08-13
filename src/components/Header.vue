@@ -94,7 +94,13 @@
           Thành viên
         </router-link>
 
-
+        <router-link
+          to="/events"
+          @click="closeMenu"
+        >
+          <span class="nav-icon">🕯️</span>
+          Ngày giỗ
+        </router-link>
         <router-link
           to="/about"
           @click="closeMenu"

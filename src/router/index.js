@@ -5,6 +5,7 @@ import Members from '../views/Members.vue'
 import Tree from '../views/Tree.vue'
 import GenerationTree from '../views/GenerationTree.vue'
 import About from '../views/About.vue'
+import Events from '../views/Events.vue'
 import PersonDetail from '../views/PersonDetail.vue';
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
   {
     path: '/tree',
     component: Tree
+  },
+  {
+  path: '/events',
+  name: 'events',
+  component: Events
   },
   {
   path: '/generation-tree',
