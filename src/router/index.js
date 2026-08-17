@@ -6,6 +6,7 @@ import Tree from '../views/Tree.vue'
 import GenerationTree from '../views/GenerationTree.vue'
 import About from '../views/About.vue'
 import Events from '../views/Events.vue'
+import Media from '../views/Media.vue'
 import PersonDetail from '../views/PersonDetail.vue';
 
 const routes = [
@@ -31,6 +32,12 @@ const routes = [
   name: 'events',
   component: Events
   },
+    {
+  path: '/media',
+  name: 'media',
+  component: Media
+  },
+
   {
   path: '/generation-tree',
   name: 'generation-tree',

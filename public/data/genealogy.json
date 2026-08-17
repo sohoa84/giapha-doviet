@@ -1,15 +1,15 @@
 {
   "meta": {
     "version": "3.2.0",
-    "generated": "2026-08-17T13:40:37.307Z"
+    "generated": "2026-08-17T14:20:35.220Z"
   },
   "stats": {
     "persons": 130,
-    "living": 125,
-    "deceased": 5,
+    "living": 123,
+    "deceased": 7,
     "marriages": 30,
-    "events": 19,
-    "media": 5,
+    "events": 20,
+    "media": 9,
     "generations": 8,
     "generationList": [
       4,
@@ -597,7 +597,7 @@
       "Cha": "VA-5.06",
       "Mẹ": "VA-5.06S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Giỗ 13/08",
       "Đời": "6",
       "Father": "VA-5.06",
       "Mother": "VA-5.06S1",
@@ -629,8 +629,8 @@
     {
       "STT": "20",
       "ID": "VA-6.05S1",
-      "Họ": "Nguyễn Thị",
-      "Tên": "Vẹt",
+      "Họ": "Vũ Quý Thị",
+      "Tên": "Vịt",
       "Tên Tự": "",
       "Giới tính": "Nữ",
       "Năm sinh": "",
@@ -638,7 +638,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "Vũ Thị Vạc, hiệu Diệu Đài giỗ 02/02 ?",
+      "Ghi chú": "Vũ Thị Vạc, hiệu Diệu Đạt giỗ 02/02 ?",
       "Đời": "6",
       "Father": "",
       "Mother": "",
@@ -651,7 +651,16 @@
       "spouses": [
         "VA-6.05"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-6.05S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "02/02",
+          "NOI DUNG": "Vũ Quý Thị Vịt, hiệu Diệu Đạt, mất 02/02",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "20"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -742,14 +751,14 @@
       "ID": "VA-7.02",
       "Họ": "Nguyễn Xuân",
       "Tên": "Cốc",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Cốc",
       "Giới tính": "Nam",
-      "Năm sinh": "",
-      "Năm mất": "",
+      "Năm sinh": "1904",
+      "Năm mất": "1977",
       "Cha": "VA-6.05",
       "Mẹ": "VA-6.05S1",
       "Photo": "",
-      "Ghi chú": "Giỗ 12/11",
+      "Ghi chú": "Giỗ 12/11 Đinh Tỵ",
       "Đời": "7",
       "Father": "VA-6.05",
       "Mother": "VA-6.05S1",
@@ -778,8 +787,8 @@
         {
           "PersonID": "VA-7.02",
           "LOAI": "Giỗ",
-          "NGÀY ÂM LỊCH": "12/11",
-          "NOI DUNG": "Nguyễn Quý Công Tự Phúc Cốc",
+          "NGÀY ÂM LỊCH": "12/11/1977",
+          "NOI DUNG": "Nguyễn Quý Công Tự Phúc Cốc. Chết 12/11/1977 Đinh Tỵ , thọ 73 tuổi",
           "MỘ PHẦN": "Nghĩa Trang Bằng A",
           "ThuTuHienThi": "3"
         }
@@ -837,12 +846,12 @@
       "Tên": "Quặm",
       "Tên Tự": "",
       "Giới tính": "Nữ",
-      "Năm sinh": "",
-      "Năm mất": "",
+      "Năm sinh": "1912",
+      "Năm mất": "1954",
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "vợ 2",
+      "Ghi chú": "Mất ngày 11/12/1954 tức 17/11 ÂL",
       "Đời": "7",
       "Father": "",
       "Mother": "",
@@ -860,8 +869,8 @@
         {
           "PersonID": "VA-7.02S2",
           "LOAI": "Giỗ",
-          "NGÀY ÂM LỊCH": "17/11",
-          "NOI DUNG": "cụ bà Quặm (vợ lẽ cụ Cốc) Giỗ 17/11 âm lịch",
+          "NGÀY ÂM LỊCH": "17/11/1954",
+          "NOI DUNG": "cụ bà Quặm (vợ lẽ cụ Cốc)  Mất ngày 11/12/1954 tức 17/11 Âm lịch",
           "MỘ PHẦN": "Nghĩa Trang Bằng A",
           "ThuTuHienThi": "15"
         }
@@ -2117,7 +2126,15 @@
         "VA-9.10S1"
       ],
       "events": [],
-      "media": [],
+      "media": [
+        {
+          "PERSONID": "VA-9.10",
+          "Type": "image",
+          "FILE": "images/XuanHien.jpg",
+          "Caption": "Ảnh gia đình",
+          "VISIBILITY": "public"
+        }
+      ],
       "biography": ""
     },
     {
@@ -2404,7 +2421,15 @@
         "VA-9.15S1"
       ],
       "events": [],
-      "media": [],
+      "media": [
+        {
+          "PERSONID": "VA-9.15",
+          "Type": "image",
+          "FILE": "images/BatTay.jpg",
+          "Caption": "Bắt tay giữa Xuân Đông và Xuân Trường",
+          "VISIBILITY": "public"
+        }
+      ],
       "biography": ""
     },
     {
@@ -2740,13 +2765,6 @@
           "PERSONID": "VA-10.01",
           "Type": "image",
           "FILE": "images/persons/VA-10.01.jpg",
-          "Caption": "chân dung",
-          "VISIBILITY": "public"
-        },
-        {
-          "PERSONID": "VA-10.01",
-          "Type": "image",
-          "FILE": "images/persons/VA-10.01.jpg",
           "Caption": "chân dung 2",
           "VISIBILITY": "private"
         }
@@ -2816,8 +2834,8 @@
         {
           "PERSONID": "VA-10.02",
           "Type": "image",
-          "FILE": "images/persons/VA-10.02.jpg",
-          "Caption": "chân dung",
+          "FILE": "images/Backdrop2026.jpg",
+          "Caption": "Background 2026",
           "VISIBILITY": "public"
         },
         {
@@ -2826,6 +2844,27 @@
           "FILE": "images/persons/VA-10.02.jpg",
           "Caption": "chân dung 2",
           "VISIBILITY": "private"
+        },
+        {
+          "PERSONID": "VA-10.02",
+          "Type": "image",
+          "FILE": "images/3ba.jpg",
+          "Caption": "Ảnh tập thể",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-10.02",
+          "Type": "image",
+          "FILE": "images/ChiVinhAn.jpg",
+          "Caption": "Ảnh tập thể",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-10.02",
+          "Type": "image",
+          "FILE": "images/CacBa.jpg",
+          "Caption": "Ảnh tập thể",
+          "VISIBILITY": "public"
         }
       ],
       "biography": ""
@@ -4575,7 +4614,7 @@
       "Cha": "VA-5.06",
       "Mẹ": "VA-5.06S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Giỗ 13/08",
       "Đời": "6",
       "Father": "VA-5.06",
       "Mother": "VA-5.06S1",
@@ -4607,8 +4646,8 @@
     "VA-6.05S1": {
       "STT": "20",
       "ID": "VA-6.05S1",
-      "Họ": "Nguyễn Thị",
-      "Tên": "Vẹt",
+      "Họ": "Vũ Quý Thị",
+      "Tên": "Vịt",
       "Tên Tự": "",
       "Giới tính": "Nữ",
       "Năm sinh": "",
@@ -4616,7 +4655,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "Vũ Thị Vạc, hiệu Diệu Đài giỗ 02/02 ?",
+      "Ghi chú": "Vũ Thị Vạc, hiệu Diệu Đạt giỗ 02/02 ?",
       "Đời": "6",
       "Father": "",
       "Mother": "",
@@ -4629,7 +4668,16 @@
       "spouses": [
         "VA-6.05"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-6.05S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "02/02",
+          "NOI DUNG": "Vũ Quý Thị Vịt, hiệu Diệu Đạt, mất 02/02",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "20"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4720,14 +4768,14 @@
       "ID": "VA-7.02",
       "Họ": "Nguyễn Xuân",
       "Tên": "Cốc",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Cốc",
       "Giới tính": "Nam",
-      "Năm sinh": "",
-      "Năm mất": "",
+      "Năm sinh": "1904",
+      "Năm mất": "1977",
       "Cha": "VA-6.05",
       "Mẹ": "VA-6.05S1",
       "Photo": "",
-      "Ghi chú": "Giỗ 12/11",
+      "Ghi chú": "Giỗ 12/11 Đinh Tỵ",
       "Đời": "7",
       "Father": "VA-6.05",
       "Mother": "VA-6.05S1",
@@ -4756,8 +4804,8 @@
         {
           "PersonID": "VA-7.02",
           "LOAI": "Giỗ",
-          "NGÀY ÂM LỊCH": "12/11",
-          "NOI DUNG": "Nguyễn Quý Công Tự Phúc Cốc",
+          "NGÀY ÂM LỊCH": "12/11/1977",
+          "NOI DUNG": "Nguyễn Quý Công Tự Phúc Cốc. Chết 12/11/1977 Đinh Tỵ , thọ 73 tuổi",
           "MỘ PHẦN": "Nghĩa Trang Bằng A",
           "ThuTuHienThi": "3"
         }
@@ -4815,12 +4863,12 @@
       "Tên": "Quặm",
       "Tên Tự": "",
       "Giới tính": "Nữ",
-      "Năm sinh": "",
-      "Năm mất": "",
+      "Năm sinh": "1912",
+      "Năm mất": "1954",
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "vợ 2",
+      "Ghi chú": "Mất ngày 11/12/1954 tức 17/11 ÂL",
       "Đời": "7",
       "Father": "",
       "Mother": "",
@@ -4838,8 +4886,8 @@
         {
           "PersonID": "VA-7.02S2",
           "LOAI": "Giỗ",
-          "NGÀY ÂM LỊCH": "17/11",
-          "NOI DUNG": "cụ bà Quặm (vợ lẽ cụ Cốc) Giỗ 17/11 âm lịch",
+          "NGÀY ÂM LỊCH": "17/11/1954",
+          "NOI DUNG": "cụ bà Quặm (vợ lẽ cụ Cốc)  Mất ngày 11/12/1954 tức 17/11 Âm lịch",
           "MỘ PHẦN": "Nghĩa Trang Bằng A",
           "ThuTuHienThi": "15"
         }
@@ -6095,7 +6143,15 @@
         "VA-9.10S1"
       ],
       "events": [],
-      "media": [],
+      "media": [
+        {
+          "PERSONID": "VA-9.10",
+          "Type": "image",
+          "FILE": "images/XuanHien.jpg",
+          "Caption": "Ảnh gia đình",
+          "VISIBILITY": "public"
+        }
+      ],
       "biography": ""
     },
     "VA-9.10S1": {
@@ -6382,7 +6438,15 @@
         "VA-9.15S1"
       ],
       "events": [],
-      "media": [],
+      "media": [
+        {
+          "PERSONID": "VA-9.15",
+          "Type": "image",
+          "FILE": "images/BatTay.jpg",
+          "Caption": "Bắt tay giữa Xuân Đông và Xuân Trường",
+          "VISIBILITY": "public"
+        }
+      ],
       "biography": ""
     },
     "VA-9.15S1": {
@@ -6718,13 +6782,6 @@
           "PERSONID": "VA-10.01",
           "Type": "image",
           "FILE": "images/persons/VA-10.01.jpg",
-          "Caption": "chân dung",
-          "VISIBILITY": "public"
-        },
-        {
-          "PERSONID": "VA-10.01",
-          "Type": "image",
-          "FILE": "images/persons/VA-10.01.jpg",
           "Caption": "chân dung 2",
           "VISIBILITY": "private"
         }
@@ -6794,8 +6851,8 @@
         {
           "PERSONID": "VA-10.02",
           "Type": "image",
-          "FILE": "images/persons/VA-10.02.jpg",
-          "Caption": "chân dung",
+          "FILE": "images/Backdrop2026.jpg",
+          "Caption": "Background 2026",
           "VISIBILITY": "public"
         },
         {
@@ -6804,6 +6861,27 @@
           "FILE": "images/persons/VA-10.02.jpg",
           "Caption": "chân dung 2",
           "VISIBILITY": "private"
+        },
+        {
+          "PERSONID": "VA-10.02",
+          "Type": "image",
+          "FILE": "images/3ba.jpg",
+          "Caption": "Ảnh tập thể",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-10.02",
+          "Type": "image",
+          "FILE": "images/ChiVinhAn.jpg",
+          "Caption": "Ảnh tập thể",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-10.02",
+          "Type": "image",
+          "FILE": "images/CacBa.jpg",
+          "Caption": "Ảnh tập thể",
+          "VISIBILITY": "public"
         }
       ],
       "biography": ""

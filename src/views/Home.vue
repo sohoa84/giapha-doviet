@@ -718,7 +718,7 @@ const homeEvents = computed(() => {
     // HOME CHỈ LẤY 4 EVENT
     // ==================================
 
-    .slice(0, 4);
+    .slice(0, 6);
 
 });
 

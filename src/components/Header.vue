@@ -101,6 +101,15 @@
           <span class="nav-icon">🕯️</span>
           Ngày giỗ
         </router-link>
+
+        <router-link
+          to="/media"
+          @click="closeMenu"
+        >
+          <span class="nav-icon">🖼️</span>
+          Hình ảnh
+        </router-link> 
+
         <router-link
           to="/about"
           @click="closeMenu"
