@@ -1,14 +1,14 @@
 {
   "meta": {
     "version": "3.2.0",
-    "generated": "2026-08-13T12:34:08.251Z"
+    "generated": "2026-08-17T13:40:37.307Z"
   },
   "stats": {
     "persons": 130,
     "living": 125,
     "deceased": 5,
     "marriages": 30,
-    "events": 8,
+    "events": 19,
     "media": 5,
     "generations": 8,
     "generationList": [
@@ -57,8 +57,9 @@
           "PersonID": "VA-4.02",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "30/05",
-          "NOI DUNG": "Giỗ cụ thuỷ tổ",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Giỗ cụ Thuỷ Tổ. Tự Phúc Bằng",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "1"
         }
       ],
       "media": [],
@@ -93,7 +94,16 @@
       "spouses": [
         "VA-4.02"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-4.02S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "08/08",
+          "NOI DUNG": "Giỗ Cụ Ngô Quý Thị, Hiệu Từ Liễn",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "2"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -201,7 +211,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Giỗ 15/07 ?",
       "Đời": "5",
       "Father": "",
       "Mother": "",
@@ -227,7 +237,7 @@
       "Cha": "VA-4.02",
       "Mẹ": "VA-4.02S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "tên Tự : Thuần Bản ( theo ds cúng giỗ) ?",
       "Đời": "5",
       "Father": "VA-4.02",
       "Mother": "VA-4.02S1",
@@ -340,7 +350,7 @@
       "Cha": "VA-4.02",
       "Mẹ": "VA-4.02S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Tự Thuần Ban, giỗ 15/10 ?",
       "Đời": "5",
       "Father": "VA-4.02",
       "Mother": "VA-4.02S1",
@@ -356,7 +366,16 @@
       "spouses": [
         "VA-5.06S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-5.06",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "15/10",
+          "NOI DUNG": "Tự Thuần Ban  giỗ 15/10 (chép theo danh sách Cung Thỉnh)",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "4"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -385,7 +404,16 @@
       "spouses": [
         "VA-5.06"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-5.06S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "15/02",
+          "NOI DUNG": "Giỗ cụ bà Nguyễn Thị Hoa, hiệu Diệu Quang",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "13"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -535,7 +563,7 @@
       "Họ": "Không có thông",
       "Tên": "tin",
       "Tên Tự": "",
-      "Giới tính": "Nữ",
+      "Giới tính": "Nam",
       "Năm sinh": "",
       "Năm mất": "",
       "Cha": "",
@@ -562,7 +590,7 @@
       "ID": "VA-6.05",
       "Họ": "Nguyễn Xuân",
       "Tên": "Tuất",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Tuất",
       "Giới tính": "Nam",
       "Năm sinh": "",
       "Năm mất": "",
@@ -585,7 +613,16 @@
       "spouses": [
         "VA-6.05S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-6.05",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "13/08",
+          "NOI DUNG": "Giỗ cụ Nguyễn Quý Công , Tự Phúc Tuất",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "5"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -601,7 +638,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Vũ Thị Vạc, hiệu Diệu Đài giỗ 02/02 ?",
       "Đời": "6",
       "Father": "",
       "Mother": "",
@@ -712,7 +749,7 @@
       "Cha": "VA-6.05",
       "Mẹ": "VA-6.05S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Giỗ 12/11",
       "Đời": "7",
       "Father": "VA-6.05",
       "Mother": "VA-6.05S1",
@@ -737,7 +774,16 @@
         "VA-7.02S1",
         "VA-7.02S2"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-7.02",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "12/11",
+          "NOI DUNG": "Nguyễn Quý Công Tự Phúc Cốc",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "3"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -753,7 +799,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "Bà Lễ",
+      "Ghi chú": "Bà Lễ, Giỗ 14/12",
       "Đời": "7",
       "Father": "",
       "Mother": "",
@@ -771,7 +817,16 @@
       "spouses": [
         "VA-7.02"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-7.02S1",
+          "LOAI": "Giỗ ",
+          "NGÀY ÂM LỊCH": "14/12",
+          "NOI DUNG": "cụ Bào, vợ cụ Cốc",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "6"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -806,8 +861,9 @@
           "PersonID": "VA-7.02S2",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "17/11",
-          "NOI DUNG": "17/11 âm lịch , Giỗ cụ Quặm (vợ cụ Cốc)",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "cụ bà Quặm (vợ lẽ cụ Cốc) Giỗ 17/11 âm lịch",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "15"
         }
       ],
       "media": [],
@@ -873,7 +929,7 @@
       "ID": "VA-8.01",
       "Họ": "Nguyễn Xuân",
       "Tên": "Tích",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Tích",
       "Giới tính": "Nam",
       "Năm sinh": "1926",
       "Năm mất": "2015",
@@ -907,8 +963,9 @@
           "PersonID": "VA-8.01",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "15/11/2014",
-          "NOI DUNG": "Cụ Tích, Chết 15/11/2014 thọ 89 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Cụ Phúc Tích, Chết 15/11/2014 thọ 89 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "7"
         }
       ],
       "media": [],
@@ -951,7 +1008,8 @@
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "04/10/1998",
           "NOI DUNG": "Cụ Đương, Chết 04/10/1998 thọ 77 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "8"
         }
       ],
       "media": [],
@@ -962,7 +1020,7 @@
       "ID": "VA-8.02",
       "Họ": "Nguyễn Xuân",
       "Tên": "Đào",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Đào",
       "Giới tính": "Nam",
       "Năm sinh": "1928",
       "Năm mất": "",
@@ -984,7 +1042,16 @@
       "spouses": [
         "VA-8.02S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.02",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "29/01",
+          "NOI DUNG": "cụ Phúc Đào, pháp danh Liễu Ngộ",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "17"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -1017,7 +1084,16 @@
       "spouses": [
         "VA-8.02"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.02S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "29/04",
+          "NOI DUNG": "Cụ Bà Đào, Pháp danh Diệu Hà,",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "18"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -1026,7 +1102,7 @@
       "ID": "VA-8.03",
       "Họ": "Nguyễn Xuân",
       "Tên": "Thảo",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Thảo",
       "Giới tính": "Nam",
       "Năm sinh": "1931",
       "Năm mất": "",
@@ -1052,7 +1128,16 @@
       "spouses": [
         "VA-8.03S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.03",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "03/06",
+          "NOI DUNG": "Cụ Phúc Thảo,  pháp danh Minh Hiền",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "16"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -1087,14 +1172,14 @@
       "ID": "VA-8.04",
       "Họ": "Nguyễn Xuân",
       "Tên": "Định",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Định",
       "Giới tính": "Nam",
       "Năm sinh": "      ",
       "Năm mất": "",
       "Cha": "VA-7.02",
       "Mẹ": "VA-7.02S1",
       "Photo": "images/persons/VA-8.04.jpg",
-      "Ghi chú": "",
+      "Ghi chú": "con tên Xuân Phong, Phương, Phú ",
       "Đời": "8",
       "Father": "VA-7.02",
       "Mother": "VA-7.02S1",
@@ -1215,7 +1300,16 @@
       ],
       "children": [],
       "spouses": [],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.06",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "23/02",
+          "NOI DUNG": "Nguyễn Phúc Lan, Tự Thuần Tuệ  (chết trẻ )",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "14"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -1252,8 +1346,9 @@
           "PersonID": "VA-8.07",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "27/06/2026",
-          "NOI DUNG": "Cụ Huệ, Chết Ngày 09/08/2026 tức  27/06/2026 Bính Ngọ,  thọ 83 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Cụ Huệ, Chết ngày 09/08/2026 tức  27/06/2026 Bính Ngọ,  thọ 83 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "12"
         }
       ],
       "media": [
@@ -1357,7 +1452,16 @@
       "spouses": [
         "VA-8.08"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.08S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "22/11/2018",
+          "NOI DUNG": "cụ Bà Chiến, Pháp Danh Diệu Hải",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "19"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -1528,8 +1632,9 @@
           "PersonID": "VA-9.02",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "15/07/2021",
-          "NOI DUNG": "Ông Độ, Chết 15/07/2021 thọ 66 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Ông Độ, Pháp danh Minh Phúc, Chết 15/07/2021 thọ 66 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "9"
         }
       ],
       "media": [],
@@ -1595,8 +1700,9 @@
           "PersonID": "VA-9.03",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "28/08/2021",
-          "NOI DUNG": "Ông Bích, Chết 28/08/2015 thọ 68 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Ông Bích, Pháp danh Minh Định, Chết 28/08/2021 thọ 68 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "10"
         }
       ],
       "media": [],
@@ -2592,8 +2698,9 @@
           "PersonID": "VA-9.20",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "23/07",
-          "NOI DUNG": "Thuỳ con cụ Chiến,  chết sớm, giỗ 23/07 âm lịch",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Xuân Thuỳ con cụ Chiến,  chết sớm, giỗ 23/07 âm lịch",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "11"
         }
       ],
       "media": [],
@@ -3928,8 +4035,9 @@
           "PersonID": "VA-4.02",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "30/05",
-          "NOI DUNG": "Giỗ cụ thuỷ tổ",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Giỗ cụ Thuỷ Tổ. Tự Phúc Bằng",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "1"
         }
       ],
       "media": [],
@@ -3964,7 +4072,16 @@
       "spouses": [
         "VA-4.02"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-4.02S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "08/08",
+          "NOI DUNG": "Giỗ Cụ Ngô Quý Thị, Hiệu Từ Liễn",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "2"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4072,7 +4189,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Giỗ 15/07 ?",
       "Đời": "5",
       "Father": "",
       "Mother": "",
@@ -4098,7 +4215,7 @@
       "Cha": "VA-4.02",
       "Mẹ": "VA-4.02S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "tên Tự : Thuần Bản ( theo ds cúng giỗ) ?",
       "Đời": "5",
       "Father": "VA-4.02",
       "Mother": "VA-4.02S1",
@@ -4211,7 +4328,7 @@
       "Cha": "VA-4.02",
       "Mẹ": "VA-4.02S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Tự Thuần Ban, giỗ 15/10 ?",
       "Đời": "5",
       "Father": "VA-4.02",
       "Mother": "VA-4.02S1",
@@ -4227,7 +4344,16 @@
       "spouses": [
         "VA-5.06S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-5.06",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "15/10",
+          "NOI DUNG": "Tự Thuần Ban  giỗ 15/10 (chép theo danh sách Cung Thỉnh)",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "4"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4256,7 +4382,16 @@
       "spouses": [
         "VA-5.06"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-5.06S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "15/02",
+          "NOI DUNG": "Giỗ cụ bà Nguyễn Thị Hoa, hiệu Diệu Quang",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "13"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4406,7 +4541,7 @@
       "Họ": "Không có thông",
       "Tên": "tin",
       "Tên Tự": "",
-      "Giới tính": "Nữ",
+      "Giới tính": "Nam",
       "Năm sinh": "",
       "Năm mất": "",
       "Cha": "",
@@ -4433,7 +4568,7 @@
       "ID": "VA-6.05",
       "Họ": "Nguyễn Xuân",
       "Tên": "Tuất",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Tuất",
       "Giới tính": "Nam",
       "Năm sinh": "",
       "Năm mất": "",
@@ -4456,7 +4591,16 @@
       "spouses": [
         "VA-6.05S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-6.05",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "13/08",
+          "NOI DUNG": "Giỗ cụ Nguyễn Quý Công , Tự Phúc Tuất",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "5"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4472,7 +4616,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Vũ Thị Vạc, hiệu Diệu Đài giỗ 02/02 ?",
       "Đời": "6",
       "Father": "",
       "Mother": "",
@@ -4583,7 +4727,7 @@
       "Cha": "VA-6.05",
       "Mẹ": "VA-6.05S1",
       "Photo": "",
-      "Ghi chú": "",
+      "Ghi chú": "Giỗ 12/11",
       "Đời": "7",
       "Father": "VA-6.05",
       "Mother": "VA-6.05S1",
@@ -4608,7 +4752,16 @@
         "VA-7.02S1",
         "VA-7.02S2"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-7.02",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "12/11",
+          "NOI DUNG": "Nguyễn Quý Công Tự Phúc Cốc",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "3"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4624,7 +4777,7 @@
       "Cha": "",
       "Mẹ": "",
       "Photo": "",
-      "Ghi chú": "Bà Lễ",
+      "Ghi chú": "Bà Lễ, Giỗ 14/12",
       "Đời": "7",
       "Father": "",
       "Mother": "",
@@ -4642,7 +4795,16 @@
       "spouses": [
         "VA-7.02"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-7.02S1",
+          "LOAI": "Giỗ ",
+          "NGÀY ÂM LỊCH": "14/12",
+          "NOI DUNG": "cụ Bào, vợ cụ Cốc",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "6"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4677,8 +4839,9 @@
           "PersonID": "VA-7.02S2",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "17/11",
-          "NOI DUNG": "17/11 âm lịch , Giỗ cụ Quặm (vợ cụ Cốc)",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "cụ bà Quặm (vợ lẽ cụ Cốc) Giỗ 17/11 âm lịch",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "15"
         }
       ],
       "media": [],
@@ -4744,7 +4907,7 @@
       "ID": "VA-8.01",
       "Họ": "Nguyễn Xuân",
       "Tên": "Tích",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Tích",
       "Giới tính": "Nam",
       "Năm sinh": "1926",
       "Năm mất": "2015",
@@ -4778,8 +4941,9 @@
           "PersonID": "VA-8.01",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "15/11/2014",
-          "NOI DUNG": "Cụ Tích, Chết 15/11/2014 thọ 89 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Cụ Phúc Tích, Chết 15/11/2014 thọ 89 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "7"
         }
       ],
       "media": [],
@@ -4822,7 +4986,8 @@
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "04/10/1998",
           "NOI DUNG": "Cụ Đương, Chết 04/10/1998 thọ 77 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "8"
         }
       ],
       "media": [],
@@ -4833,7 +4998,7 @@
       "ID": "VA-8.02",
       "Họ": "Nguyễn Xuân",
       "Tên": "Đào",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Đào",
       "Giới tính": "Nam",
       "Năm sinh": "1928",
       "Năm mất": "",
@@ -4855,7 +5020,16 @@
       "spouses": [
         "VA-8.02S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.02",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "29/01",
+          "NOI DUNG": "cụ Phúc Đào, pháp danh Liễu Ngộ",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "17"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4888,7 +5062,16 @@
       "spouses": [
         "VA-8.02"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.02S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "29/04",
+          "NOI DUNG": "Cụ Bà Đào, Pháp danh Diệu Hà,",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "18"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4897,7 +5080,7 @@
       "ID": "VA-8.03",
       "Họ": "Nguyễn Xuân",
       "Tên": "Thảo",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Thảo",
       "Giới tính": "Nam",
       "Năm sinh": "1931",
       "Năm mất": "",
@@ -4923,7 +5106,16 @@
       "spouses": [
         "VA-8.03S1"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.03",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "03/06",
+          "NOI DUNG": "Cụ Phúc Thảo,  pháp danh Minh Hiền",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "16"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -4958,14 +5150,14 @@
       "ID": "VA-8.04",
       "Họ": "Nguyễn Xuân",
       "Tên": "Định",
-      "Tên Tự": "",
+      "Tên Tự": "Phúc Định",
       "Giới tính": "Nam",
       "Năm sinh": "      ",
       "Năm mất": "",
       "Cha": "VA-7.02",
       "Mẹ": "VA-7.02S1",
       "Photo": "images/persons/VA-8.04.jpg",
-      "Ghi chú": "",
+      "Ghi chú": "con tên Xuân Phong, Phương, Phú ",
       "Đời": "8",
       "Father": "VA-7.02",
       "Mother": "VA-7.02S1",
@@ -5086,7 +5278,16 @@
       ],
       "children": [],
       "spouses": [],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.06",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "23/02",
+          "NOI DUNG": "Nguyễn Phúc Lan, Tự Thuần Tuệ  (chết trẻ )",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "14"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -5123,8 +5324,9 @@
           "PersonID": "VA-8.07",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "27/06/2026",
-          "NOI DUNG": "Cụ Huệ, Chết Ngày 09/08/2026 tức  27/06/2026 Bính Ngọ,  thọ 83 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Cụ Huệ, Chết ngày 09/08/2026 tức  27/06/2026 Bính Ngọ,  thọ 83 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "12"
         }
       ],
       "media": [
@@ -5228,7 +5430,16 @@
       "spouses": [
         "VA-8.08"
       ],
-      "events": [],
+      "events": [
+        {
+          "PersonID": "VA-8.08S1",
+          "LOAI": "Giỗ",
+          "NGÀY ÂM LỊCH": "22/11/2018",
+          "NOI DUNG": "cụ Bà Chiến, Pháp Danh Diệu Hải",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "19"
+        }
+      ],
       "media": [],
       "biography": ""
     },
@@ -5399,8 +5610,9 @@
           "PersonID": "VA-9.02",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "15/07/2021",
-          "NOI DUNG": "Ông Độ, Chết 15/07/2021 thọ 66 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Ông Độ, Pháp danh Minh Phúc, Chết 15/07/2021 thọ 66 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "9"
         }
       ],
       "media": [],
@@ -5466,8 +5678,9 @@
           "PersonID": "VA-9.03",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "28/08/2021",
-          "NOI DUNG": "Ông Bích, Chết 28/08/2015 thọ 68 tuổi",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Ông Bích, Pháp danh Minh Định, Chết 28/08/2021 thọ 68 tuổi",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "10"
         }
       ],
       "media": [],
@@ -6463,8 +6676,9 @@
           "PersonID": "VA-9.20",
           "LOAI": "Giỗ",
           "NGÀY ÂM LỊCH": "23/07",
-          "NOI DUNG": "Thuỳ con cụ Chiến,  chết sớm, giỗ 23/07 âm lịch",
-          "MỘ PHẦN": "Nghĩa Trang Bằng A"
+          "NOI DUNG": "Xuân Thuỳ con cụ Chiến,  chết sớm, giỗ 23/07 âm lịch",
+          "MỘ PHẦN": "Nghĩa Trang Bằng A",
+          "ThuTuHienThi": "11"
         }
       ],
       "media": [],

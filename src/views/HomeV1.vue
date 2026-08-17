@@ -121,8 +121,8 @@
 
         <router-link to="/about" class="quick-card">
           <span class="quick-icon">🏮</span>
-          <strong>Về Vĩnh An</strong>
-          <small>Câu chuyện và nguồn cội</small>
+          <strong>Về Nguyễn Xuân</strong>
+          <small>Nội quy Gia tộc Nguyễn Xuân Vĩnh An</small>
         </router-link>
       </section>
 
@@ -133,7 +133,7 @@
         <div class="section-heading">
           <div>
             <span class="eyebrow">TỔNG QUAN</span>
-            <h2>Gia phả Vĩnh An</h2>
+            <h2>Gia phả Chi Vĩnh An</h2>
           </div>
         </div>
 
@@ -189,79 +189,37 @@
       </section>
 
       <!-- ============================== -->
-      <!-- EVENTS / NGÀY GIỖ -->
+      <!-- EVENTS -->
       <!-- ============================== -->
       <section
-        v-if="homeEvents.length"
-        class="section-card events-section"
+        v-if="recentEvents.length"
+        class="section-card"
       >
         <div class="section-heading">
           <div>
-            <span class="eyebrow">GHI NHỚ NGUỒN CỘI</span>
-            <h2>Ngày giỗ & Sự kiện</h2>
+            <span class="eyebrow">GHI NHỚ</span>
+            <h2>Sự kiện gia tộc</h2>
           </div>
-
-          <router-link
-            to="/events"
-            class="text-link"
-          >
-            Xem tất cả
-          </router-link>
         </div>
 
         <div class="event-list">
           <article
-            v-for="event in homeEvents"
+            v-for="event in recentEvents"
             :key="event.key"
             class="event-item"
           >
             <div class="event-date">
-              <strong>{{ event.day }}</strong>
-              <span>THÁNG {{ event.month }}</span>
-              <small>ÂM LỊCH</small>
+              <span>{{ event.date || '--/--' }}</span>
+              <small>Âm lịch</small>
             </div>
 
             <div class="event-content">
-              <span
-                class="event-type"
-                :class="{ death: event.isDeath }"
-              >
-                {{ event.isDeath ? '🕯️ Ngày giỗ' : '📅 ' + (event.type || 'Sự kiện') }}
-              </span>
-
-              <h3>
-                {{ event.content || event.type || 'Sự kiện gia tộc' }}
-              </h3>
-
-              <router-link
-                v-if="event.personId"
-                :to="{
-                  name: 'person-detail',
-                  params: { id: event.personId }
-                }"
-                class="event-person"
-              >
-                {{ event.personName }}
-                <span>›</span>
-              </router-link>
-
-              <p
-                v-if="event.place"
-                class="event-place"
-              >
-                📍 {{ event.place }}
-              </p>
+              <span class="event-type">{{ event.type || 'Sự kiện' }}</span>
+              <h3>{{ event.content || 'Sự kiện gia tộc' }}</h3>
+              <p v-if="event.place">{{ event.place }}</p>
             </div>
           </article>
         </div>
-
-        <router-link
-          to="/events"
-          class="events-more"
-        >
-          Xem toàn bộ ngày giỗ & sự kiện
-          <span>→</span>
-        </router-link>
       </section>
 
       <!-- ============================== -->
@@ -458,268 +416,42 @@ const publicMediaCount = computed(() => {
   );
 });
 
-function normalizeText(value) {
-  return String(value || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/Đ/g, 'D')
-    .toLowerCase()
-    .trim();
-}
-
-function parseLunarDate(value) {
-  const text =
-    String(value || '').trim();
-
-  const match =
-    text.match(
-      /(\d{1,2})\s*[\/\-]\s*(\d{1,2})/
-    );
-
-  if (!match) {
-    return {
-      day: 0,
-      month: 0
-    };
-  }
-
-  return {
-    day: Number(match[1]),
-    month: Number(match[2])
-  };
-}
-
-function isDeathEvent(event) {
-  const text =
-    normalizeText(
-      [
-        event?.['LOAI'],
-        event?.['Loại'],
-        event?.['NOI DUNG'],
-        event?.['NỘI DUNG'],
-        event?.['Nội dung']
-      ]
-        .filter(Boolean)
-        .join(' ')
-    );
-
-  return (
-    text.includes('gio') ||
-    text.includes('ngay mat') ||
-    text.includes('ngay ky')
-  );
-}
-
-const homeEvents = computed(() => {
-
+const recentEvents = computed(() => {
   const result = [];
 
-
   persons.value.forEach(person => {
-
-    const personEvents =
+    const events =
       Array.isArray(person.events)
         ? person.events
         : [];
 
-
-    personEvents.forEach((event, index) => {
-
-      const lunarDate =
-        event['NGÀY ÂM LỊCH'] ||
-        event['Ngày âm lịch'] ||
-        '';
-
-
-      const parsed =
-        parseLunarDate(lunarDate);
-
-
-      // ==================================
-      // THỨ TỰ HIỂN THỊ TRANG HOME
-      //
-      // Excel EVENTS:
-      // ThuTuHienThi = 1, 2, 3, 4...
-      //
-      // Nếu để trống:
-      // → không ưu tiên
-      // → xếp sau các event có số
-      // ==================================
-
-      const displayOrderRaw =
-        event.ThuTuHienThi ??
-        event['ThuTuHienThi'] ??
-        '';
-
-
-      const displayOrder =
-        displayOrderRaw !== ''
-          ? Number(displayOrderRaw)
-          : null;
-
-
+    events.forEach((event, index) => {
       result.push({
-
         key:
           `${person.ID}-${index}-${event['LOAI'] || ''}`,
-
-
-        personId:
-          person.ID,
-
-
-        personName:
-          fullName(person),
-
-
+        personId: person.ID,
         type:
           event['LOAI'] ||
           event['Loại'] ||
           '',
-
-
         date:
-          lunarDate,
-
-
-        day:
-          parsed.day
-            ? String(parsed.day)
-                .padStart(2, '0')
-            : '--',
-
-
-        month:
-          parsed.month
-            ? String(parsed.month)
-                .padStart(2, '0')
-            : '--',
-
-
-        monthNumber:
-          parsed.month,
-
-
-        dayNumber:
-          parsed.day,
-
-
+          event['NGÀY ÂM LỊCH'] ||
+          event['Ngày âm lịch'] ||
+          '',
         content:
           event['NOI DUNG'] ||
           event['NỘI DUNG'] ||
           event['Nội dung'] ||
           '',
-
-
         place:
           event['MỘ PHẦN'] ||
           event['Mộ phần'] ||
-          '',
-
-
-        isDeath:
-          isDeathEvent(event),
-
-
-        // Quan trọng
-        displayOrder:
-          Number.isFinite(displayOrder)
-            ? displayOrder
-            : null
-
+          ''
       });
-
     });
-
   });
 
-
-  return result
-
-    // ==================================
-    // SẮP XẾP ƯU TIÊN
-    // ==================================
-
-    .sort((a, b) => {
-
-      const aHasOrder =
-        a.displayOrder !== null;
-
-      const bHasOrder =
-        b.displayOrder !== null;
-
-
-      // Event có ThuTuHienThi
-      // đứng trước event không có
-      if (
-        aHasOrder &&
-        !bHasOrder
-      ) {
-        return -1;
-      }
-
-
-      if (
-        !aHasOrder &&
-        bHasOrder
-      ) {
-        return 1;
-      }
-
-
-      // Cả hai đều có ThuTuHienThi
-      // → sort 1, 2, 3, 4...
-      if (
-        aHasOrder &&
-        bHasOrder
-      ) {
-
-        if (
-          a.displayOrder !==
-          b.displayOrder
-        ) {
-
-          return (
-            a.displayOrder -
-            b.displayOrder
-          );
-
-        }
-
-      }
-
-
-      // Nếu không có thứ tự,
-      // hoặc trùng thứ tự,
-      // thì sort tiếp theo ngày âm
-      if (
-        a.monthNumber !==
-        b.monthNumber
-      ) {
-
-        return (
-          a.monthNumber -
-          b.monthNumber
-        );
-
-      }
-
-
-      return (
-        a.dayNumber -
-        b.dayNumber
-      );
-
-    })
-
-
-    // ==================================
-    // HOME CHỈ LẤY 4 EVENT
-    // ==================================
-
-    .slice(0, 4);
-
+  return result.slice(0, 3);
 });
 
 function goToPerson(id) {
@@ -1179,7 +911,6 @@ function openFirstSearchResult() {
   display: flex;
   gap: 12px;
   padding: 12px;
-  border: 1px solid #eee5d9;
   border-radius: 16px;
   background: var(--heritage-cream);
 }
@@ -1190,101 +921,49 @@ function openFirstSearchResult() {
   align-items: center;
   justify-content: center;
   flex: 0 0 72px;
-  min-height: 78px;
+  min-height: 70px;
   border-radius: 13px;
   background: var(--heritage-red);
   color: #fff;
   text-align: center;
 }
 
-.event-date strong {
-  font-family: Georgia, serif;
-  font-size: 1.4rem;
-  line-height: 1;
-}
-
 .event-date span {
-  margin-top: 5px;
-  font-size: 0.62rem;
+  font-family: Georgia, serif;
+  font-size: 1rem;
   font-weight: 800;
 }
 
 .event-date small {
   margin-top: 2px;
   color: rgba(255, 255, 255, 0.72);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
 }
 
 .event-content {
   min-width: 0;
-  flex: 1;
   padding-top: 2px;
 }
 
 .event-type {
-  display: inline-flex;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #f3eadb;
-  color: #9a713e;
-  font-size: 0.62rem;
+  color: #a17c48;
+  font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.event-type.death {
-  background: #f9e5e5;
-  color: var(--heritage-red);
+  letter-spacing: 0.06em;
 }
 
 .event-content h3 {
-  margin: 6px 0;
+  margin: 3px 0;
   color: #42362e;
   font-size: 0.95rem;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
-.event-person {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--heritage-red);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.event-person span {
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
-.event-place {
-  margin: 5px 0 0;
+.event-content p {
+  margin: 0;
   color: #857b71;
-  font-size: 0.73rem;
-  line-height: 1.4;
-}
-
-.events-more {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 43px;
-  margin-top: 12px;
-  border: 1px solid #eadbc5;
-  border-radius: 12px;
-  background: #fffaf2;
-  color: var(--heritage-red);
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.events-more span {
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
 
 /* ============================== */
