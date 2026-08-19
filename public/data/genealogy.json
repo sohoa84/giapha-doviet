@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "3.2.0",
-    "generated": "2026-08-18T13:17:36.469Z"
+    "generated": "2026-08-19T09:47:01.358Z"
   },
   "stats": {
     "persons": 130,
@@ -3274,10 +3274,7 @@
         "VA-9.09",
         "VA-9.09S1"
       ],
-      "children": [
-        "VA-11.09",
-        "VA-11.10"
-      ],
+      "children": [],
       "spouses": [
         "VA-10.09S1"
       ],
@@ -3303,10 +3300,7 @@
       "Mother": "",
       "generation": 10,
       "parents": [],
-      "children": [
-        "VA-11.09",
-        "VA-11.10"
-      ],
+      "children": [],
       "spouses": [
         "VA-10.09"
       ],
@@ -3335,7 +3329,10 @@
         "VA-9.09",
         "VA-9.09S1"
       ],
-      "children": [],
+      "children": [
+        "VA-11.09",
+        "VA-11.10"
+      ],
       "spouses": [
         "VA-10.10S1"
       ],
@@ -3361,7 +3358,10 @@
       "Mother": "",
       "generation": 10,
       "parents": [],
-      "children": [],
+      "children": [
+        "VA-11.09",
+        "VA-11.10"
+      ],
       "spouses": [
         "VA-10.10"
       ],
@@ -3953,17 +3953,17 @@
       "Giới tính": "Nam",
       "Năm sinh": "2009",
       "Năm mất": "",
-      "Cha": "VA-10.09",
-      "Mẹ": "VA-10.09S1",
+      "Cha": "VA-10.10",
+      "Mẹ": "VA-10.10S1",
       "Photo": "images/persons/VA-11.09.jpg",
       "Ghi chú": "",
       "Đời": "11",
-      "Father": "VA-10.09",
-      "Mother": "VA-10.09S1",
+      "Father": "VA-10.10",
+      "Mother": "VA-10.10S1",
       "generation": 11,
       "parents": [
-        "VA-10.09",
-        "VA-10.09S1"
+        "VA-10.10",
+        "VA-10.10S1"
       ],
       "children": [],
       "spouses": [],
@@ -3980,17 +3980,17 @@
       "Giới tính": "Nam",
       "Năm sinh": "2014",
       "Năm mất": "",
-      "Cha": "VA-10.09",
-      "Mẹ": "VA-10.09S1",
+      "Cha": "VA-10.10",
+      "Mẹ": "VA-10.10S1",
       "Photo": "images/persons/VA-11.10.jpg",
       "Ghi chú": "",
       "Đời": "11",
-      "Father": "VA-10.09",
-      "Mother": "VA-10.09S1",
+      "Father": "VA-10.10",
+      "Mother": "VA-10.10S1",
       "generation": 11,
       "parents": [
-        "VA-10.09",
-        "VA-10.09S1"
+        "VA-10.10",
+        "VA-10.10S1"
       ],
       "children": [],
       "spouses": [],
@@ -7305,10 +7305,7 @@
         "VA-9.09",
         "VA-9.09S1"
       ],
-      "children": [
-        "VA-11.09",
-        "VA-11.10"
-      ],
+      "children": [],
       "spouses": [
         "VA-10.09S1"
       ],
@@ -7334,10 +7331,7 @@
       "Mother": "",
       "generation": 10,
       "parents": [],
-      "children": [
-        "VA-11.09",
-        "VA-11.10"
-      ],
+      "children": [],
       "spouses": [
         "VA-10.09"
       ],
@@ -7366,7 +7360,10 @@
         "VA-9.09",
         "VA-9.09S1"
       ],
-      "children": [],
+      "children": [
+        "VA-11.09",
+        "VA-11.10"
+      ],
       "spouses": [
         "VA-10.10S1"
       ],
@@ -7392,7 +7389,10 @@
       "Mother": "",
       "generation": 10,
       "parents": [],
-      "children": [],
+      "children": [
+        "VA-11.09",
+        "VA-11.10"
+      ],
       "spouses": [
         "VA-10.10"
       ],
@@ -7984,17 +7984,17 @@
       "Giới tính": "Nam",
       "Năm sinh": "2009",
       "Năm mất": "",
-      "Cha": "VA-10.09",
-      "Mẹ": "VA-10.09S1",
+      "Cha": "VA-10.10",
+      "Mẹ": "VA-10.10S1",
       "Photo": "images/persons/VA-11.09.jpg",
       "Ghi chú": "",
       "Đời": "11",
-      "Father": "VA-10.09",
-      "Mother": "VA-10.09S1",
+      "Father": "VA-10.10",
+      "Mother": "VA-10.10S1",
       "generation": 11,
       "parents": [
-        "VA-10.09",
-        "VA-10.09S1"
+        "VA-10.10",
+        "VA-10.10S1"
       ],
       "children": [],
       "spouses": [],
@@ -8011,17 +8011,17 @@
       "Giới tính": "Nam",
       "Năm sinh": "2014",
       "Năm mất": "",
-      "Cha": "VA-10.09",
-      "Mẹ": "VA-10.09S1",
+      "Cha": "VA-10.10",
+      "Mẹ": "VA-10.10S1",
       "Photo": "images/persons/VA-11.10.jpg",
       "Ghi chú": "",
       "Đời": "11",
-      "Father": "VA-10.09",
-      "Mother": "VA-10.09S1",
+      "Father": "VA-10.10",
+      "Mother": "VA-10.10S1",
       "generation": 11,
       "parents": [
-        "VA-10.09",
-        "VA-10.09S1"
+        "VA-10.10",
+        "VA-10.10S1"
       ],
       "children": [],
       "spouses": [],
