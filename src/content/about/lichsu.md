@@ -157,7 +157,7 @@ Website và bộ gia phả điện tử này được xây dựng với mục đ
 
 Từ **Cụ Nguyễn Quý Công – tự Phúc Bằng**, các thế hệ con cháu Chi Vĩnh An tiếp tục nối đời, tạo thành các nhánh gia đình được ghi chép trong gia phả cho đến ngày nay.
 
-![Các thế hệ Chi Vĩnh An](images/about/gia-dinh-vinh-an.jpg)
+![Các thế hệ Chi Vĩnh An](images/ChiVinhAn.jpg)
 
 *Các thế hệ con cháu Chi Vĩnh An tiếp nối truyền thống gia đình và gìn giữ nguồn cội.*
 

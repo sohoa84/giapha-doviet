@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "3.2.0",
-    "generated": "2026-08-19T12:50:06.197Z"
+    "generated": "2026-08-19T13:16:33.323Z"
   },
   "stats": {
     "persons": 130,
@@ -797,7 +797,7 @@
         {
           "PERSONID": "VA-7.02",
           "Type": "image",
-          "FILE": "image/about/chi-vinh-an.jpg",
+          "FILE": "images/about/chi-vinh-an.jpg",
           "Caption": "Sơ đồ chi vĩnh an",
           "VISIBILITY": "public"
         },
@@ -820,7 +820,7 @@
           "Type": "image",
           "FILE": "images/about/gia-pha-co.jpg",
           "Caption": "Trang sách Gia phả Nguyễn Xuân",
-          "VISIBILITY": "public"
+          "VISIBILITY": "private"
         }
       ],
       "biography": ""
@@ -4857,7 +4857,7 @@
         {
           "PERSONID": "VA-7.02",
           "Type": "image",
-          "FILE": "image/about/chi-vinh-an.jpg",
+          "FILE": "images/about/chi-vinh-an.jpg",
           "Caption": "Sơ đồ chi vĩnh an",
           "VISIBILITY": "public"
         },
@@ -4880,7 +4880,7 @@
           "Type": "image",
           "FILE": "images/about/gia-pha-co.jpg",
           "Caption": "Trang sách Gia phả Nguyễn Xuân",
-          "VISIBILITY": "public"
+          "VISIBILITY": "private"
         }
       ],
       "biography": ""

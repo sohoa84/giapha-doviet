@@ -1,39 +1,31 @@
 <template>
 
-  <div class="generation-page container-fluid">
+  <div class="generation-page container-fluid py-4">
 
-    <!-- ===================================== -->
+    <!-- ====================================== -->
     <!-- HEADER -->
-    <!-- ===================================== -->
+    <!-- ====================================== -->
 
-    <header class="page-header">
+    <div class="page-header mb-4">
 
-      <div class="header-icon">
-        🌳
-      </div>
+      <h2 class="fw-bold mb-1">
+        🌳 Cây gia phả theo thế hệ
+      </h2>
 
-      <div>
+      <p class="text-muted mb-0">
+        Thành viên được sắp xếp theo đúng thứ tự vai vế trong họ
+      </p>
 
-        <h1>
-          Cây gia phả theo thế hệ
-        </h1>
-
-        <p>
-          Thành viên được sắp xếp theo đúng thứ tự vai vế trong họ
-        </p>
-
-      </div>
-
-    </header>
+    </div>
 
 
-    <!-- ===================================== -->
+    <!-- ====================================== -->
     <!-- LOADING -->
-    <!-- ===================================== -->
+    <!-- ====================================== -->
 
     <div
       v-if="loading"
-      class="loading-box"
+      class="text-center py-5"
     >
 
       <div
@@ -41,44 +33,54 @@
         role="status"
       ></div>
 
-      <div class="loading-text">
+      <div class="mt-3 text-muted">
         Đang xây dựng cây theo thế hệ...
       </div>
 
     </div>
 
 
-    <!-- ===================================== -->
+    <!-- ====================================== -->
     <!-- ERROR -->
-    <!-- ===================================== -->
+    <!-- ====================================== -->
 
     <div
       v-else-if="error"
       class="alert alert-danger"
     >
+
       {{ error }}
+
     </div>
 
 
-    <!-- ===================================== -->
+    <!-- ====================================== -->
     <!-- CONTENT -->
-    <!-- ===================================== -->
+    <!-- ====================================== -->
 
-    <template v-else>
+    <div v-else>
 
-      <!-- =================================== -->
+      <!-- ====================================== -->
       <!-- TOOLBAR -->
-      <!-- =================================== -->
+      <!-- ====================================== -->
 
-      <div class="generation-toolbar">
+      <div class="generation-toolbar mb-3">
 
-        <div class="toolbar-actions">
+        <div class="toolbar-left">
+
+          <!-- HIỆN / ẨN DÂU RỂ -->
 
           <button
             type="button"
-            class="toolbar-button"
-            :class="{ active: showSpouses }"
-            @click="showSpouses = !showSpouses"
+            class="btn"
+            :class="
+              showSpouses
+                ? 'btn-primary'
+                : 'btn-outline-secondary'
+            "
+            @click="
+              showSpouses = !showSpouses
+            "
           >
 
             <i
@@ -90,24 +92,20 @@
               "
             ></i>
 
-            <span class="desktop-label">
-              {{
-                showSpouses
-                  ? 'Ẩn dâu / rể'
-                  : 'Hiện dâu / rể'
-              }}
-            </span>
-
-            <span class="mobile-label">
-              Dâu/rể
-            </span>
+            {{
+              showSpouses
+                ? 'Ẩn dâu / rể'
+                : 'Hiện dâu / rể'
+            }}
 
           </button>
 
 
+          <!-- THU / MỞ TẤT CẢ -->
+
           <button
             type="button"
-            class="toolbar-button"
+            class="btn btn-outline-secondary"
             @click="toggleAll"
           >
 
@@ -120,38 +118,30 @@
               "
             ></i>
 
-            <span class="desktop-label">
-              {{
-                allExpanded
-                  ? 'Thu gọn các đời'
-                  : 'Mở rộng các đời'
-              }}
-            </span>
-
-            <span class="mobile-label">
-              {{
-                allExpanded
-                  ? 'Thu'
-                  : 'Mở'
-              }}
-            </span>
+            {{
+              allExpanded
+                ? 'Thu gọn các đời'
+                : 'Mở rộng các đời'
+            }}
 
           </button>
 
         </div>
 
 
+        <!-- THỐNG KÊ -->
+
         <div class="toolbar-info">
+
+          Có
 
           <strong>
             {{ totalPersons }}
           </strong>
 
-          thành viên chính
+          thành viên
 
-          <span class="dot-separator">
-            •
-          </span>
+          ·
 
           <strong>
             {{ generations.length }}
@@ -164,16 +154,16 @@
       </div>
 
 
-      <!-- =================================== -->
-      <!-- LEGEND -->
-      <!-- =================================== -->
+      <!-- ====================================== -->
+      <!-- CHÚ THÍCH -->
+      <!-- ====================================== -->
 
-      <div class="legend">
+      <div class="legend mb-4">
 
         <div class="legend-item">
 
           <span
-            class="legend-line male"
+            class="legend-dot dot-male"
           ></span>
 
           Nam
@@ -184,7 +174,7 @@
         <div class="legend-item">
 
           <span
-            class="legend-line female"
+            class="legend-dot dot-female"
           ></span>
 
           Nữ
@@ -198,7 +188,7 @@
         >
 
           <span
-            class="legend-line dau"
+            class="legend-dot dot-dau"
           ></span>
 
           Dâu
@@ -212,7 +202,7 @@
         >
 
           <span
-            class="legend-line re"
+            class="legend-dot dot-re"
           ></span>
 
           Rể
@@ -222,9 +212,9 @@
       </div>
 
 
-      <!-- =================================== -->
-      <!-- GENERATIONS -->
-      <!-- =================================== -->
+      <!-- ====================================== -->
+      <!-- CÁC ĐỜI -->
+      <!-- ====================================== -->
 
       <div class="generations">
 
@@ -234,29 +224,29 @@
           class="generation-section"
         >
 
-          <!-- ================================= -->
-          <!-- GENERATION HEADER -->
-          <!-- ================================= -->
+          <!-- ================================== -->
+          <!-- HEADER ĐỜI -->
+          <!-- ================================== -->
 
-          <button
-            type="button"
+          <div
             class="generation-header"
-            @click="toggleGeneration(generation)"
+            @click="
+              toggleGeneration(generation)
+            "
           >
 
             <div class="generation-title">
 
               <span class="generation-number">
+
                 ĐỜI {{ generation }}
+
               </span>
+
 
               <span class="generation-count">
 
-                {{
-                  peopleByGeneration(
-                    generation
-                  ).length
-                }}
+                {{ peopleByGeneration(generation).length }}
 
                 thành viên
 
@@ -265,7 +255,13 @@
             </div>
 
 
-            <span class="generation-chevron">
+            <button
+              type="button"
+              class="generation-toggle"
+              @click.stop="
+                toggleGeneration(generation)
+              "
+            >
 
               <i
                 class="bi"
@@ -276,37 +272,40 @@
                 "
               ></i>
 
-            </span>
+            </button>
 
-          </button>
+          </div>
 
 
-          <!-- ================================= -->
-          <!-- FAMILY LIST -->
-          <!-- ================================= -->
+          <!-- ================================== -->
+          <!-- PEOPLE -->
+          <!-- ================================== -->
 
           <div
-            v-if="isExpanded(generation)"
+            v-if="
+              isExpanded(generation)
+            "
             class="generation-people"
           >
 
+            <!-- ================================= -->
+            <!-- FAMILY BLOCK -->
+            <!-- ================================= -->
+
             <div
               v-for="
-                family in
-                familyBlocksByGeneration(
+                family in familyBlocksByGeneration(
                   generation
-                )
-              "
+                )"
               :key="family.person.ID"
               class="family-block"
             >
 
-              <!-- =============================== -->
-              <!-- CORE PERSON -->
-              <!-- =============================== -->
+              <!-- ================================= -->
+              <!-- NGƯỜI TRONG HỌ -->
+              <!-- ================================= -->
 
-              <button
-                type="button"
+              <div
                 class="person-wrapper"
                 @click="
                   openPerson(
@@ -329,10 +328,14 @@
                   "
                 >
 
+                  <!-- PHOTO -->
+
                   <div class="person-avatar">
 
                     <img
-                      v-if="family.person.Photo"
+                      v-if="
+                        family.person.Photo
+                      "
                       :src="
                         getPhotoUrl(
                           family.person.Photo
@@ -343,7 +346,6 @@
                           family.person
                         )
                       "
-                      loading="lazy"
                     >
 
                     <i
@@ -354,31 +356,27 @@
                   </div>
 
 
+                  <!-- INFO -->
+
                   <div class="person-info">
 
                     <div class="person-name">
 
-                      <span class="gender-icon">
-
+                      <span
+                        class="gender-icon"
+                      >
                         {{
                           genderIcon(
                             family.person
                           )
                         }}
-
                       </span>
 
-
-                      <span class="name-text">
-
-                        {{
-                          fullName(
-                            family.person
-                          )
-                        }}
-
-                      </span>
-
+                      {{
+                        fullName(
+                          family.person
+                        )
+                      }}
 
                       <span
                         v-if="
@@ -394,68 +392,22 @@
                     </div>
 
 
-                    <div
-                      v-if="
-                        family.person['Tên Tự']
-                      "
-                      class="person-alias"
-                    >
-
-                      Tự:
-                      {{
-                        family.person[
-                          'Tên Tự'
-                        ]
-                      }}
-
-                    </div>
-
-
                     <div class="person-meta">
 
                       {{ family.person.ID }}
 
-                      <span
-                        v-if="
-                          family.person[
-                            'Năm sinh'
-                          ] ||
-                          family.person[
-                            'Năm mất'
-                          ]
-                        "
-                      >
-                        •
-                        {{
-                          family.person[
-                            'Năm sinh'
-                          ] || '?'
-                        }}
-                        –
-                        {{
-                          family.person[
-                            'Năm mất'
-                          ] || ''
-                        }}
-                      </span>
-
                     </div>
 
                   </div>
 
-
-                  <div class="open-arrow">
-                    ›
-                  </div>
-
                 </div>
 
-              </button>
+              </div>
 
 
-              <!-- =============================== -->
-              <!-- SPOUSES -->
-              <!-- =============================== -->
+              <!-- ================================= -->
+              <!-- VỢ / CHỒNG -->
+              <!-- ================================= -->
 
               <template
                 v-if="
@@ -464,28 +416,20 @@
                 "
               >
 
-                <div class="marriage-link">
+                <div class="marriage-line">
 
-                  <span class="marriage-line"></span>
-
-                  <span class="heart">
-                    ♥
-                  </span>
-
-                  <span class="marriage-line"></span>
+                  <span>♥</span>
 
                 </div>
 
 
                 <div class="spouses">
 
-                  <button
+                  <div
                     v-for="
-                      spouse in
-                      family.spouses
+                      spouse in family.spouses
                     "
                     :key="spouse.ID"
-                    type="button"
                     class="person-wrapper spouse-wrapper"
                     @click="
                       openPerson(
@@ -508,10 +452,16 @@
                       "
                     >
 
-                      <div class="person-avatar">
+                      <!-- PHOTO -->
+
+                      <div
+                        class="person-avatar"
+                      >
 
                         <img
-                          v-if="spouse.Photo"
+                          v-if="
+                            spouse.Photo
+                          "
                           :src="
                             getPhotoUrl(
                               spouse.Photo
@@ -522,7 +472,6 @@
                               spouse
                             )
                           "
-                          loading="lazy"
                         >
 
                         <i
@@ -533,31 +482,31 @@
                       </div>
 
 
-                      <div class="person-info">
+                      <!-- INFO -->
 
-                        <div class="person-name">
+                      <div
+                        class="person-info"
+                      >
 
-                          <span class="gender-icon">
+                        <div
+                          class="person-name"
+                        >
 
+                          <span
+                            class="gender-icon"
+                          >
                             {{
                               genderIcon(
                                 spouse
                               )
                             }}
-
                           </span>
 
-
-                          <span class="name-text">
-
-                            {{
-                              fullName(
-                                spouse
-                              )
-                            }}
-
-                          </span>
-
+                          {{
+                            fullName(
+                              spouse
+                            )
+                          }}
 
                           <span
                             v-if="
@@ -573,63 +522,41 @@
                         </div>
 
 
+                        <!-- DÂU / RỂ -->
+
                         <div
-                          v-if="
-                            spouse['Tên Tự']
+                          class="relationship-label"
+                          :class="
+                            relationshipType(
+                              spouse
+                            ) === 'DÂU'
+                              ? 'label-dau'
+                              : 'label-re'
                           "
-                          class="person-alias"
                         >
 
-                          Tự:
                           {{
-                            spouse[
-                              'Tên Tự'
-                            ]
+                            relationshipType(
+                              spouse
+                            )
                           }}
 
                         </div>
 
 
-                        <div class="spouse-meta-row">
+                        <div
+                          class="person-meta"
+                        >
 
-                          <span
-                            class="relationship-label"
-                            :class="
-                              relationshipType(
-                                spouse
-                              ) === 'DÂU'
-                                ? 'label-dau'
-                                : 'label-re'
-                            "
-                          >
-
-                            {{
-                              relationshipType(
-                                spouse
-                              )
-                            }}
-
-                          </span>
-
-
-                          <span class="person-meta">
-
-                            {{ spouse.ID }}
-
-                          </span>
+                          {{ spouse.ID }}
 
                         </div>
 
                       </div>
 
-
-                      <div class="open-arrow">
-                        ›
-                      </div>
-
                     </div>
 
-                  </button>
+                  </div>
 
                 </div>
 
@@ -637,6 +564,10 @@
 
             </div>
 
+
+            <!-- ================================= -->
+            <!-- EMPTY -->
+            <!-- ================================= -->
 
             <div
               v-if="
@@ -646,7 +577,9 @@
               "
               class="empty-generation"
             >
+
               Không có thành viên.
+
             </div>
 
           </div>
@@ -655,7 +588,7 @@
 
       </div>
 
-    </template>
+    </div>
 
   </div>
 
@@ -749,6 +682,17 @@ async function loadGenerationTree() {
         )
 
         .filter(Boolean);
+
+
+    console.log(
+      'GenerationTree persons:',
+      persons.value
+    );
+
+    console.log(
+      'GenerationTree total:',
+      persons.value.length
+    );
 
   }
 
@@ -1618,119 +1562,53 @@ onMounted(
         generations.value
       );
 
+
+    console.log(
+      'GenerationTree total:',
+      totalPersons.value
+    );
+
+    console.log(
+      'GenerationTree generations:',
+      generations.value
+    );
+
   }
 );
 
 </script>
 
+
 <style scoped>
 
-/* ===================================== */
+/* ====================================== */
 /* PAGE */
-/* ===================================== */
+/* ====================================== */
 
 .generation-page {
 
   width: 100%;
 
-  padding:
-    26px 18px
-    70px;
-
 }
 
 
-/* ===================================== */
+/* ====================================== */
 /* HEADER */
-/* ===================================== */
+/* ====================================== */
 
 .page-header {
 
-  display: flex;
+  padding-bottom: 15px;
 
-  align-items: center;
-
-  gap: 13px;
-
-  margin-bottom: 18px;
+  border-bottom:
+    1px solid #dee2e6;
 
 }
 
 
-.header-icon {
-
-  width: 50px;
-
-  height: 50px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #eef7ee;
-
-  font-size: 25px;
-
-}
-
-
-.page-header h1 {
-
-  margin: 0;
-
-  color: #343a40;
-
-  font-size: 1.65rem;
-
-  font-weight: 750;
-
-}
-
-
-.page-header p {
-
-  margin:
-    4px 0 0;
-
-  color: #6c757d;
-
-  font-size: 0.9rem;
-
-}
-
-
-/* ===================================== */
-/* LOADING */
-/* ===================================== */
-
-.loading-box {
-
-  padding:
-    70px 0;
-
-  text-align: center;
-
-}
-
-
-.loading-text {
-
-  margin-top: 10px;
-
-  color: #6c757d;
-
-}
-
-
-/* ===================================== */
+/* ====================================== */
 /* TOOLBAR */
-/* ===================================== */
+/* ====================================== */
 
 .generation-toolbar {
 
@@ -1740,74 +1618,33 @@ onMounted(
 
   justify-content: space-between;
 
-  gap: 10px;
+  flex-wrap: wrap;
 
-  margin-bottom: 10px;
-
-  padding:
-    10px 12px;
-
-  border:
-    1px solid
-    #e3e6e8;
-
-  border-radius: 12px;
-
-  background: #ffffff;
+  gap: 12px;
 
 }
 
 
-.toolbar-actions {
+.toolbar-left {
 
   display: flex;
 
   align-items: center;
 
-  gap: 7px;
+  flex-wrap: wrap;
+
+  gap: 8px;
 
 }
 
 
-.toolbar-button {
+.toolbar-left .btn {
 
-  min-height: 38px;
+  font-size: 0.85rem;
 
-  display: inline-flex;
+  font-weight: 600;
 
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 6px;
-
-  padding:
-    7px 11px;
-
-  border:
-    1px solid
-    #ced4da;
-
-  border-radius: 9px;
-
-  background: #ffffff;
-
-  color: #495057;
-
-  font-size: 0.82rem;
-
-  font-weight: 700;
-
-}
-
-
-.toolbar-button.active {
-
-  border-color: #0d6efd;
-
-  background: #0d6efd;
-
-  color: #ffffff;
+  border-radius: 8px;
 
 }
 
@@ -1816,38 +1653,14 @@ onMounted(
 
   color: #6c757d;
 
-  font-size: 0.83rem;
+  font-size: 0.9rem;
 
 }
 
 
-.toolbar-info strong {
-
-  color: #343a40;
-
-}
-
-
-.dot-separator {
-
-  margin:
-    0 4px;
-
-  color: #adb5bd;
-
-}
-
-
-.mobile-label {
-
-  display: none;
-
-}
-
-
-/* ===================================== */
+/* ====================================== */
 /* LEGEND */
-/* ===================================== */
+/* ====================================== */
 
 .legend {
 
@@ -1857,14 +1670,13 @@ onMounted(
 
   flex-wrap: wrap;
 
-  gap: 16px;
+  gap: 20px;
 
-  margin-bottom: 16px;
+  padding: 10px 14px;
 
-  padding:
-    8px 11px;
+  border: 1px solid #e9ecef;
 
-  border-radius: 10px;
+  border-radius: 8px;
 
   background: #f8f9fa;
 
@@ -1879,97 +1691,87 @@ onMounted(
 
   gap: 6px;
 
-  color: #5f676e;
+  font-size: 0.8rem;
 
-  font-size: 0.75rem;
-
-  font-weight: 700;
+  font-weight: 600;
 
 }
 
 
-.legend-line {
+.legend-dot {
 
-  width: 22px;
+  width: 12px;
 
-  height: 0;
+  height: 12px;
 
-  border-top-width: 3px;
+  flex: 0 0 12px;
 
-  border-top-style: solid;
-
-}
-
-
-.legend-line.male {
-
-  border-color: #4dabf7;
+  border-radius: 50%;
 
 }
 
 
-.legend-line.female {
+.dot-male {
 
-  border-color: #f783ac;
-
-}
-
-
-.legend-line.dau {
-
-  border-color: #f783ac;
-
-  border-top-style: dashed;
+  background: #9ec5fe;
 
 }
 
 
-.legend-line.re {
+.dot-female {
 
-  border-color: #4dabf7;
-
-  border-top-style: dashed;
+  background: #f1aeb5;
 
 }
 
 
-/* ===================================== */
+.dot-dau {
+
+  background: #d63384;
+
+}
+
+
+.dot-re {
+
+  background: #7950f2;
+
+}
+
+
+/* ====================================== */
 /* GENERATION */
-/* ===================================== */
-
-.generations {
-
-  display: grid;
-
-  gap: 14px;
-
-}
-
+/* ====================================== */
 
 .generation-section {
+
+  margin-bottom: 18px;
 
   overflow: hidden;
 
   border:
-    1px solid
-    #dee2e6;
+    1px solid #dee2e6;
 
-  border-radius: 13px;
+  border-radius: 10px;
 
-  background: #ffffff;
+  background: #fff;
+
+  box-shadow:
+    0 2px 6px
+    rgba(0, 0, 0, 0.04);
 
 }
 
 
-/* ===================================== */
-/* GENERATION HEADER */
-/* ===================================== */
+/* ====================================== */
+/* HEADER ĐỜI */
+/* ====================================== */
 
 .generation-header {
 
-  width: 100%;
-
   min-height: 54px;
+
+  padding: 8px 15px;
 
   display: flex;
 
@@ -1977,25 +1779,19 @@ onMounted(
 
   justify-content: space-between;
 
-  padding:
-    9px 14px;
+  cursor: pointer;
 
-  border: 0;
+  background: #f8f9fa;
 
   border-bottom:
-    1px solid
-    #e9ecef;
+    1px solid #dee2e6;
 
-  background:
-    linear-gradient(
-      90deg,
-      #fafafa,
-      #f4f6f7
-    );
+}
 
-  color: #343a40;
 
-  text-align: left;
+.generation-header:hover {
+
+  background: #f1f3f5;
 
 }
 
@@ -2006,49 +1802,44 @@ onMounted(
 
   align-items: center;
 
-  gap: 9px;
-
-  min-width: 0;
+  gap: 10px;
 
 }
 
 
 .generation-number {
 
-  font-size: 0.94rem;
+  font-size: 0.95rem;
 
-  font-weight: 850;
+  font-weight: 800;
 
-  letter-spacing: 0.04em;
+  letter-spacing: 0.5px;
 
 }
 
 
 .generation-count {
 
-  padding:
-    3px 8px;
+  padding: 3px 9px;
 
-  border-radius: 999px;
+  border-radius: 20px;
 
   background: #e9ecef;
 
   color: #6c757d;
 
-  font-size: 0.68rem;
+  font-size: 0.72rem;
 
-  font-weight: 700;
+  font-weight: 600;
 
 }
 
 
-.generation-chevron {
+.generation-toggle {
 
   width: 32px;
 
   height: 32px;
-
-  flex-shrink: 0;
 
   display: flex;
 
@@ -2057,21 +1848,20 @@ onMounted(
   justify-content: center;
 
   border:
-    1px solid
-    #d8dde1;
+    1px solid #ced4da;
 
   border-radius: 50%;
 
-  background: #ffffff;
+  background: #fff;
 
   color: #495057;
 
 }
 
 
-/* ===================================== */
-/* FAMILY LIST */
-/* ===================================== */
+/* ====================================== */
+/* PEOPLE */
+/* ====================================== */
 
 .generation-people {
 
@@ -2079,14 +1869,18 @@ onMounted(
 
   flex-wrap: wrap;
 
-  align-items: flex-start;
+  align-items: center;
 
   gap: 12px;
 
-  padding: 14px;
+  padding: 15px;
 
 }
 
+
+/* ====================================== */
+/* FAMILY BLOCK */
+/* ====================================== */
 
 .family-block {
 
@@ -2096,50 +1890,33 @@ onMounted(
 
   flex: 0 0 auto;
 
-  gap: 6px;
-
-  padding:
-    5px 6px;
-
-  border-radius: 11px;
-
-  background: #fbfbfb;
+  gap: 7px;
 
 }
 
 
-/* ===================================== */
-/* PERSON BUTTON */
-/* ===================================== */
+/* ====================================== */
+/* PERSON WRAPPER */
+/* ====================================== */
 
 .person-wrapper {
 
-  flex: 0 0 auto;
-
-  padding: 0;
-
-  border: 0;
-
-  background: transparent;
-
-  text-align: left;
-
   cursor: pointer;
+
+  flex: 0 0 auto;
 
 }
 
 
-/* ===================================== */
-/* PERSON CARD */
-/* ===================================== */
+/* ====================================== */
+/* CARD */
+/* ====================================== */
 
 .person-card {
 
-  position: relative;
+  width: 230px;
 
-  width: 235px;
-
-  min-height: 80px;
+  min-height: 76px;
 
   display: flex;
 
@@ -2147,19 +1924,14 @@ onMounted(
 
   gap: 10px;
 
-  padding:
-    9px 31px
-    9px 10px;
+  padding: 8px 10px;
 
   border:
-    1px solid
-    #dee2e6;
+    1px solid #dee2e6;
 
-  border-left-width: 4px;
+  border-radius: 10px;
 
-  border-radius: 11px;
-
-  background: #ffffff;
+  background: #fff;
 
   transition:
     transform 0.15s ease,
@@ -2176,82 +1948,88 @@ onMounted(
 
   box-shadow:
     0 5px 14px
-    rgba(
-      0,
-      0,
-      0,
-      0.09
-    );
+    rgba(0, 0, 0, 0.10);
 
 }
 
 
-/* ===================================== */
-/* NAM / NỮ */
-/* ===================================== */
+/* ====================================== */
+/* NAM */
+/* ====================================== */
 
 .card-male {
 
-  border-left-color: #4dabf7;
+  border-left:
+    4px solid #4dabf7;
 
 }
 
+
+/* ====================================== */
+/* NỮ */
+/* ====================================== */
 
 .card-female {
 
-  border-left-color: #f783ac;
+  border-left:
+    4px solid #f783ac;
 
 }
 
 
-/* ===================================== */
-/* DÂU / RỂ */
-/* ===================================== */
+/* ====================================== */
+/* DÂU */
+/* ====================================== */
 
 .card-dau {
 
-  border-color: #f783ac;
+  border-left:
+    4px dashed #d63384;
 
-  border-style: dashed;
-
-  border-left-width: 4px;
-
-  background: #fff8fb;
+  background:
+    #fff5fa;
 
 }
 
+
+/* ====================================== */
+/* RỂ */
+/* ====================================== */
 
 .card-re {
 
-  border-color: #4dabf7;
+  border-left:
+    4px dashed #7950f2;
 
-  border-style: dashed;
-
-  border-left-width: 4px;
-
-  background: #f7fbff;
+  background:
+    #f7f3ff;
 
 }
 
+
+/* ====================================== */
+/* UNKNOWN */
+/* ====================================== */
 
 .card-unknown {
 
-  border-left-color: #adb5bd;
+  border-left:
+    4px solid #adb5bd;
 
 }
 
 
-/* ===================================== */
+/* ====================================== */
 /* AVATAR */
-/* ===================================== */
+/* ====================================== */
 
 .person-avatar {
 
   width: 48px;
 
-  height: 48px;
+  min-width: 48px;
 
-  flex: 0 0 48px;
+  height: 48px;
 
   display: flex;
 
@@ -2267,7 +2045,7 @@ onMounted(
 
   color: #adb5bd;
 
-  font-size: 1.3rem;
+  font-size: 1.35rem;
 
 }
 
@@ -2283,193 +2061,113 @@ onMounted(
 }
 
 
-/* ===================================== */
-/* PERSON INFO */
-/* ===================================== */
+/* ====================================== */
+/* INFO */
+/* ====================================== */
 
 .person-info {
 
-  flex: 1;
-
   min-width: 0;
+
+  flex: 1;
 
 }
 
 
 .person-name {
 
-  display: flex;
-
-  align-items: center;
-
-  min-width: 0;
-
-  color: #343a40;
-
-  font-size: 0.9rem;
-
-  font-weight: 750;
-
-}
-
-
-.name-text {
-
-  min-width: 0;
-
   overflow: hidden;
 
   text-overflow: ellipsis;
 
   white-space: nowrap;
+
+  font-size: 0.9rem;
+
+  font-weight: 650;
 
 }
 
 
 .gender-icon {
 
-  margin-right: 4px;
+  margin-right: 3px;
 
-  flex-shrink: 0;
-
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 
 }
 
 
-.deceased {
-
-  margin-left: 4px;
-
-  color: #6c757d;
-
-}
-
-
-.person-alias {
+.person-meta {
 
   margin-top: 2px;
 
-  overflow: hidden;
-
-  color: #795548;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-
-  font-size: 0.69rem;
-
-  font-style: italic;
-
-}
-
-
-.person-meta {
-
-  margin-top: 3px;
-
   color: #868e96;
 
-  font-size: 0.7rem;
+  font-size: 0.75rem;
 
 }
 
 
-.open-arrow {
-
-  position: absolute;
-
-  right: 9px;
-
-  top: 50%;
-
-  transform:
-    translateY(-50%);
-
-  color: #adb5bd;
-
-  font-size: 22px;
-
-}
-
-
-/* ===================================== */
-/* RELATIONSHIP LABEL */
-/* ===================================== */
-
-.spouse-meta-row {
-
-  display: flex;
-
-  align-items: center;
-
-  flex-wrap: wrap;
-
-  gap: 5px;
-
-  margin-top: 3px;
-
-}
-
-
-.spouse-meta-row
-.person-meta {
-
-  margin-top: 0;
-
-}
-
+/* ====================================== */
+/* LABEL DÂU / RỂ */
+/* ====================================== */
 
 .relationship-label {
 
-  display: inline-flex;
+  display: inline-block;
 
-  padding:
-    1px 6px;
+  margin-top: 3px;
 
-  border-radius: 999px;
+  padding: 1px 6px;
 
-  font-size: 0.55rem;
+  border-radius: 8px;
 
-  font-weight: 850;
+  font-size: 0.58rem;
 
-  letter-spacing: 0.04em;
+  font-weight: 800;
+
+  letter-spacing: 0.3px;
 
 }
 
 
 .label-dau {
 
-  border:
-    1px dashed
-    #f783ac;
+  background: #fce4ec;
 
-  background: #fff0f6;
-
-  color: #c2255c;
+  color: #c2185b;
 
 }
 
 
 .label-re {
 
-  border:
-    1px dashed
-    #4dabf7;
+  background: #ede7f6;
 
-  background: #e7f5ff;
-
-  color: #1971c2;
+  color: #5e35b1;
 
 }
 
 
-/* ===================================== */
-/* MARRIAGE LINK */
-/* ===================================== */
+/* ====================================== */
+/* DECEASED */
+/* ====================================== */
 
-.marriage-link {
+.deceased {
+
+  color: #6c757d;
+
+  margin-left: 3px;
+
+}
+
+
+/* ====================================== */
+/* MARRIAGE */
+/* ====================================== */
+
+.marriage-line {
 
   display: flex;
 
@@ -2477,36 +2175,48 @@ onMounted(
 
   justify-content: center;
 
-  gap: 4px;
+  color: #dc3545;
 
-  flex-shrink: 0;
+  font-size: 0.9rem;
 
-  color: #c92a2a;
+  font-weight: 700;
 
 }
 
 
-.marriage-line {
+.marriage-line::before {
 
-  width: 13px;
+  content: '';
+
+  width: 14px;
 
   height: 1px;
 
-  background: #cfd4da;
+  margin-right: 4px;
+
+  background: #ced4da;
 
 }
 
 
-.heart {
+.marriage-line::after {
 
-  font-size: 0.8rem;
+  content: '';
+
+  width: 14px;
+
+  height: 1px;
+
+  margin-left: 4px;
+
+  background: #ced4da;
 
 }
 
 
-/* ===================================== */
+/* ====================================== */
 /* SPOUSES */
-/* ===================================== */
+/* ====================================== */
 
 .spouses {
 
@@ -2519,9 +2229,16 @@ onMounted(
 }
 
 
-/* ===================================== */
+.spouse-wrapper {
+
+  flex: 0 0 auto;
+
+}
+
+
+/* ====================================== */
 /* EMPTY */
-/* ===================================== */
+/* ====================================== */
 
 .empty-generation {
 
@@ -2536,119 +2253,15 @@ onMounted(
 }
 
 
-/* ===================================== */
+/* ====================================== */
 /* MOBILE */
-/* ===================================== */
+/* ====================================== */
 
 @media (max-width: 768px) {
 
-  .generation-page {
-
-    padding:
-      16px 10px
-      60px;
-
-  }
-
-
-  .page-header {
-
-    gap: 9px;
-
-    margin-bottom: 13px;
-
-  }
-
-
-  .header-icon {
-
-    width: 42px;
-
-    height: 42px;
-
-    font-size: 21px;
-
-  }
-
-
-  .page-header h1 {
-
-    font-size: 1.25rem;
-
-  }
-
-
-  .page-header p {
-
-    font-size: 0.76rem;
-
-    line-height: 1.35;
-
-  }
-
-
-  /* TOOLBAR */
-
   .generation-toolbar {
 
-    position: sticky;
-
-    top: 62px;
-
-    z-index: 15;
-
-    align-items: stretch;
-
-    padding:
-      7px;
-
-    border-radius: 10px;
-
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        0.96
-      );
-
-    backdrop-filter:
-      blur(8px);
-
-  }
-
-
-  .toolbar-actions {
-
-    flex: 1;
-
-  }
-
-
-  .toolbar-button {
-
-    flex: 1;
-
-    min-height: 37px;
-
-    padding:
-      6px 8px;
-
-    font-size: 0.74rem;
-
-  }
-
-
-  .desktop-label {
-
-    display: none;
-
-  }
-
-
-  .mobile-label {
-
-    display: inline;
+    align-items: flex-start;
 
   }
 
@@ -2657,246 +2270,58 @@ onMounted(
 
     width: 100%;
 
-    padding:
-      2px 3px
-      0;
-
-    font-size: 0.72rem;
-
   }
 
-
-  .legend {
-
-    gap: 12px;
-
-    margin-bottom: 11px;
-
-    padding:
-      7px 9px;
-
-  }
-
-
-  .legend-item {
-
-    font-size: 0.68rem;
-
-  }
-
-
-  /* GENERATION */
-
-  .generations {
-
-    gap: 10px;
-
-  }
-
-
-  .generation-section {
-
-    border-radius: 11px;
-
-  }
-
-
-  .generation-header {
-
-    min-height: 49px;
-
-    padding:
-      7px 10px;
-
-  }
-
-
-  .generation-number {
-
-    font-size: 0.86rem;
-
-  }
-
-
-  .generation-count {
-
-    font-size: 0.62rem;
-
-  }
-
-
-  /*
-    QUAN TRỌNG:
-    Mobile KHÔNG cuộn ngang nữa.
-    Mỗi family block xếp dọc,
-    thành viên chính → ♥ → spouse.
-  */
 
   .generation-people {
 
-    display: grid;
+    overflow-x: auto;
 
-    grid-template-columns: 1fr;
+    flex-wrap: nowrap;
 
-    gap: 10px;
-
-    padding:
-      10px 8px;
-
-  }
-
-
-  .family-block {
-
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 5px;
-
-    padding:
-      8px;
-
-    border:
-      1px solid
-      #eef0f2;
-
-    border-radius: 11px;
-
-    background: #fafafa;
-
-  }
-
-
-  .person-wrapper {
-
-    width: 100%;
+    padding-bottom: 15px;
 
   }
 
 
   .person-card {
 
-    width: 100%;
-
-    min-height: 75px;
-
-    padding:
-      8px 30px
-      8px 9px;
-
-  }
-
-
-  .person-avatar {
-
-    width: 46px;
-
-    height: 46px;
-
-    flex-basis: 46px;
-
-  }
-
-
-  .person-name {
-
-    font-size: 0.88rem;
-
-  }
-
-
-  .person-meta {
-
-    font-size: 0.68rem;
-
-  }
-
-
-  /* HEART XẾP DỌC */
-
-  .marriage-link {
-
-    height: 25px;
-
-    flex-direction: column;
-
-    gap: 1px;
-
-  }
-
-
-  .marriage-line {
-
-    width: 1px;
-
-    height: 6px;
-
-  }
-
-
-  .spouses {
-
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: 1fr;
-
-    gap: 6px;
-
-  }
-
-
-  .spouse-wrapper {
-
-    width: 100%;
+    width: 210px;
 
   }
 
 }
 
 
-/* ===================================== */
-/* MOBILE NHỎ */
-/* ===================================== */
+/* ====================================== */
+/* SMALL MOBILE */
+/* ====================================== */
 
-@media (max-width: 390px) {
+@media (max-width: 480px) {
 
   .generation-page {
 
-    padding-left: 7px;
+    padding-left: 10px !important;
 
-    padding-right: 7px;
-
-  }
-
-
-  .generation-count {
-
-    display: none;
-
-  }
-
-
-  .person-avatar {
-
-    width: 42px;
-
-    height: 42px;
-
-    flex-basis: 42px;
+    padding-right: 10px !important;
 
   }
 
 
   .person-card {
 
-    min-height: 69px;
+    width: 200px;
+
+  }
+
+
+  .person-avatar {
+
+    width: 44px;
+
+    min-width: 44px;
+
+    height: 44px;
 
   }
 
