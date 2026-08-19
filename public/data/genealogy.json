@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "3.2.0",
-    "generated": "2026-08-19T09:47:01.358Z"
+    "generated": "2026-08-19T12:50:06.197Z"
   },
   "stats": {
     "persons": 130,
@@ -9,7 +9,7 @@
     "deceased": 30,
     "marriages": 30,
     "events": 20,
-    "media": 11,
+    "media": 15,
     "generations": 8,
     "generationList": [
       4,
@@ -793,7 +793,36 @@
           "ThuTuHienThi": "3"
         }
       ],
-      "media": [],
+      "media": [
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "image/about/chi-vinh-an.jpg",
+          "Caption": "Sơ đồ chi vĩnh an",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "images/about/so-do-nguyenxuan.jpg",
+          "Caption": "Sơ đổ Tổng Gia Phả họ Nguyễn Xuân từ đời 1",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "images/about/ba-chi-nguyen-xuan.jpg",
+          "Caption": "Hình thành ba nhánh Chi",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "images/about/gia-pha-co.jpg",
+          "Caption": "Trang sách Gia phả Nguyễn Xuân",
+          "VISIBILITY": "public"
+        }
+      ],
       "biography": ""
     },
     {
@@ -4824,7 +4853,36 @@
           "ThuTuHienThi": "3"
         }
       ],
-      "media": [],
+      "media": [
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "image/about/chi-vinh-an.jpg",
+          "Caption": "Sơ đồ chi vĩnh an",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "images/about/so-do-nguyenxuan.jpg",
+          "Caption": "Sơ đổ Tổng Gia Phả họ Nguyễn Xuân từ đời 1",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "images/about/ba-chi-nguyen-xuan.jpg",
+          "Caption": "Hình thành ba nhánh Chi",
+          "VISIBILITY": "public"
+        },
+        {
+          "PERSONID": "VA-7.02",
+          "Type": "image",
+          "FILE": "images/about/gia-pha-co.jpg",
+          "Caption": "Trang sách Gia phả Nguyễn Xuân",
+          "VISIBILITY": "public"
+        }
+      ],
       "biography": ""
     },
     "VA-7.02S1": {
