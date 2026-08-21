@@ -1362,7 +1362,7 @@ watch(
 
 .section-title > i {
 
-  color: #922525;
+  color: var(--family-primary);
 
 }
 

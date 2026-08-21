@@ -15,7 +15,7 @@
         </h2>
 
         <p class="text-muted mb-0">
-          Quan hệ các thế hệ trong dòng họ Nguyễn Xuân
+          Quan hệ các thế hệ trong {{ familyConfig.familyName }}
         </p>
 
       </div>
@@ -231,6 +231,9 @@
 
 
 <script setup>
+
+import familyConfig
+  from '../config/family.config';
 
 import {
   ref,

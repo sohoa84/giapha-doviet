@@ -6,7 +6,7 @@
     <section class="hero-section">
       <img
         :src="heroImage"
-        alt="Đại gia đình Nguyễn Xuân - Chi Vĩnh An"
+        :alt="`Đại gia đình ${familyConfig.familyShortName} - ${familyConfig.branchName}`"
         class="hero-image"
       >
 
@@ -16,12 +16,12 @@
         <span class="hero-kicker">GIA PHẢ DÒNG HỌ</span>
 
         <h1>
-          NGUYỄN XUÂN
-          <span>CHI VĨNH AN</span>
+          {{ familyConfig.heroTitle }}
+          <span>{{ familyConfig.heroSubtitle }}</span>
         </h1>
 
         <p>
-          Lưu giữ nguồn cội · Kết nối các thế hệ
+          {{ familyConfig.slogan }}
         </p>
       </div>
     </section>
@@ -44,7 +44,7 @@
           <input
             v-model="searchKeyword"
             type="search"
-            placeholder="Nhập họ tên, tên tự hoặc mã VA..."
+            :placeholder="`Nhập họ tên, tên tự hoặc mã ${familyConfig.familyCode}...`"
             autocomplete="off"
             @keyup.enter="openFirstSearchResult"
           >
@@ -121,7 +121,7 @@
 
         <router-link to="/about" class="quick-card">
           <span class="quick-icon">🏮</span>
-          <strong>Về Vĩnh An</strong>
+          <strong>Về {{ familyConfig.branchShortName }}</strong>
           <small>Câu chuyện và nguồn cội</small>
         </router-link>
       </section>
@@ -133,7 +133,7 @@
         <div class="section-heading">
           <div>
             <span class="eyebrow">TỔNG QUAN</span>
-            <h2>Gia phả Vĩnh An</h2>
+            <h2>Gia phả {{ familyConfig.branchShortName }}</h2>
           </div>
         </div>
 
@@ -267,11 +267,11 @@
       <!-- ============================== -->
       <!-- FAMILY MESSAGE -->
       <!-- ============================== -->
-      <section class="heritage-section">
+      <section class="heritage-section" >
         <div class="heritage-mark">❦</div>
-        <p class="heritage-label">NGUYỄN XUÂN · CHI VĨNH AN</p>
+        <p class="heritage-label">{{ familyConfig.heroTitle }} · {{ familyConfig.heroSubtitle }}</p>
         <blockquote>
-          “Uống nước nhớ nguồn · Ăn quả nhớ người trồng cây”
+          “{{ familyConfig.heritageQuote }}”
         </blockquote>
         <p class="heritage-text">
           Nơi lưu giữ thông tin, hình ảnh và ký ức của các thế hệ,
@@ -298,10 +298,13 @@ import {
   getStats
 } from '../services/dataService';
 
+import familyConfig
+  from '../config/family.config';
+
 const router = useRouter();
 
 const heroImage =
-  `${import.meta.env.BASE_URL}images/ChiVinhAn.jpg`;
+  `${import.meta.env.BASE_URL}${familyConfig.images.banner}`;
 
 const persons = ref([]);
 const stats = ref({});
@@ -742,8 +745,8 @@ function openFirstSearchResult() {
 
 <style scoped>
 .home-page {
-  --heritage-red: #7a1f1f;
-  --heritage-red-dark: #521313;
+  --heritage-red: var(--family-primary);
+  --heritage-red-dark: var(--family-primary-dark);
   --heritage-gold: #c9a35d;
   --heritage-gold-soft: #f3e8cc;
   --heritage-cream: #f8f5ee;
@@ -1070,7 +1073,7 @@ function openFirstSearchResult() {
 
 .quick-card-primary {
   background:
-    linear-gradient(145deg, #7b1e1e, #541515);
+    linear-gradient(145deg, var(--family-primary), var(--family-primary-dark));
   color: #fff;
 }
 
@@ -1295,26 +1298,37 @@ function openFirstSearchResult() {
   margin-top: 20px;
   padding: 28px 20px;
   border-radius: 22px;
+
   background:
     radial-gradient(
       circle at top,
       rgba(232, 201, 132, 0.18),
       transparent 45%
     ),
-    #531717;
-  color: #fff;
+    linear-gradient(
+      135deg,
+      var(--family-primary),
+      var(--family-primary-dark)
+    );
+
+  color:
+    var(--family-header-text);
+
   text-align: center;
-  box-shadow: 0 12px 30px rgba(77, 23, 23, 0.14);
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, 0.14);
 }
 
 .heritage-mark {
-  color: #e6c77e;
+  color: var(--family-accent);
   font-size: 1.8rem;
 }
 
 .heritage-label {
   margin: 6px 0 12px;
-  color: #efd79e;
+  color: var(--family-accent);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.12em;

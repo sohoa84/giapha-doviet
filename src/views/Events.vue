@@ -1453,9 +1453,9 @@ onUnmounted(() => {
 
 .filter-tabs button.active {
 
-  border-color: #922525;
+  border-color: var(--family-primary);
 
-  background: #922525;
+  background: var(--family-primary);
 
   color: #ffffff;
 
@@ -1515,7 +1515,7 @@ onUnmounted(() => {
 
   background: transparent;
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 0.82rem;
 
@@ -1564,7 +1564,7 @@ onUnmounted(() => {
 
   border-radius: 10px;
 
-  background: #922525;
+  background: var(--family-primary);
 
   color: #ffffff;
 
@@ -1648,7 +1648,7 @@ onUnmounted(() => {
 
   border-left:
     4px solid
-    #922525;
+    var(--family-primary);
 
 }
 
@@ -1685,7 +1685,7 @@ onUnmounted(() => {
 
 .event-date strong {
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 1.65rem;
 
@@ -1764,7 +1764,7 @@ onUnmounted(() => {
 
   background: #fff0f0;
 
-  color: #922525;
+  color: var(--family-primary);
 
 }
 
@@ -1935,7 +1935,7 @@ onUnmounted(() => {
 
   margin-top: 1px;
 
-  color: #922525;
+  color: var(--family-primary);
 
 }
 
@@ -2016,7 +2016,7 @@ onUnmounted(() => {
 
   border-radius: 8px;
 
-  background: #922525;
+  background: var(--family-primary);
 
   color: #ffffff;
 

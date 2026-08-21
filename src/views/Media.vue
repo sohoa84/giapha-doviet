@@ -1299,7 +1299,7 @@ onUnmounted(() => {
 
   background: transparent;
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 0.82rem;
 
@@ -1481,7 +1481,7 @@ onUnmounted(() => {
 
   margin-top: 7px;
 
-  color: #922525;
+  color: var(--family-primary);
 
   text-decoration: none;
 
@@ -1570,7 +1570,7 @@ onUnmounted(() => {
 
   border-radius: 8px;
 
-  background: #922525;
+  background: var(--family-primary);
 
   color: #ffffff;
 

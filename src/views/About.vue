@@ -14,11 +14,11 @@
 
       <div>
         <div class="eyebrow">
-          NGUYỄN XUÂN
+          {{ familyConfig.heroTitle }}
         </div>
 
         <h2>
-          Giới thiệu Chi Vĩnh An
+          Giới thiệu {{ familyConfig.branchName }}
         </h2>
 
         <p>
@@ -74,7 +74,7 @@
 
         <div>
           <div class="document-label">
-            GIỚI THIỆU CHI VĨNH AN
+            GIỚI THIỆU {{ familyConfig.branchName.toUpperCase() }}
           </div>
 
           <h2>
@@ -150,6 +150,9 @@ import {
 
 import MarkdownIt
   from 'markdown-it';
+
+import familyConfig
+  from '../config/family.config';
 
 
 import loinoidauMarkdown
@@ -462,7 +465,7 @@ onMounted(() => {
 
   margin-bottom: 2px;
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 0.9rem;
 
@@ -580,9 +583,9 @@ onMounted(() => {
 
 .tab-button.active {
 
-  border-color: #922525;
+  border-color: var(--family-primary);
 
-  background: #922525;
+  background: var(--family-primary);
 
   color: #ffffff;
 
@@ -714,7 +717,7 @@ onMounted(() => {
     6px 0
     20px;
 
-  color: #7c2020;
+  color: var(--family-primary);
 
   font-family:
     Georgia,
@@ -742,7 +745,7 @@ onMounted(() => {
     1px solid
     #ede4d9;
 
-  color: #7c2020;
+  color: var(--family-primary);
 
   font-family:
     Georgia,
@@ -760,7 +763,7 @@ onMounted(() => {
     24px 0
     8px;
 
-  color: #7c2020;
+  color: var(--family-primary);
 
   font-size: 1.05rem;
 
@@ -823,7 +826,7 @@ onMounted(() => {
 
   border-left:
     4px solid
-    #922525;
+    var(--family-primary);
 
   border-radius:
     0 10px
@@ -928,7 +931,7 @@ onMounted(() => {
 
   display: block;
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 0.82rem;
 
@@ -937,7 +940,7 @@ onMounted(() => {
 
 .nav-section-button > span {
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 20px;
 

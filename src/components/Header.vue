@@ -19,11 +19,11 @@
 
         <div class="brand-text">
           <div class="brand-title">
-            Gia phả Nguyễn Xuân
+            {{ familyConfig.brandTitle }}
           </div>
 
           <div class="brand-subtitle">
-            Chi Vĩnh An
+            {{ familyConfig.branchName }}
           </div>
         </div>
 
@@ -150,6 +150,9 @@ import {
   useRoute
 } from 'vue-router';
 
+import familyConfig
+  from '../config/family.config';
+
 
 const route =
   useRoute();
@@ -272,11 +275,11 @@ onUnmounted(() => {
   background:
     linear-gradient(
       135deg,
-      #761c1c,
-      #922525
+      var(--family-primary-dark),
+      var(--family-primary)
     );
 
-  color: #ffffff;
+  color: var(--family-header-text);
 
   box-shadow:
     0 2px 8px
@@ -325,7 +328,7 @@ onUnmounted(() => {
 
   min-width: 0;
 
-  color: #ffffff;
+  color: var(--family-header-text);
 
   text-decoration: none;
 
@@ -435,7 +438,7 @@ onUnmounted(() => {
 
   border-radius: 8px;
 
-  color: #ffffff;
+  color: var(--family-header-text);
 
   text-decoration: none;
 
@@ -708,8 +711,8 @@ onUnmounted(() => {
     background:
       linear-gradient(
         180deg,
-        #852020,
-        #721919
+        var(--family-primary),
+        var(--family-primary-dark)
       );
 
     border-top:

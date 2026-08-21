@@ -11,7 +11,7 @@
       <div>
 
         <h1>
-          Thành viên họ Nguyễn Xuân
+          Thành viên {{ familyConfig.familyName }}
         </h1>
 
         <p>
@@ -74,7 +74,7 @@
         <input
           v-model="searchKeyword"
           type="search"
-          placeholder="Tìm tên, Tên Tự hoặc mã VA..."
+          :placeholder="`Tìm tên, Tên Tự hoặc mã ${familyConfig.familyCode}...`"
         >
 
         <button
@@ -277,6 +277,9 @@ import {
 
 import PersonCard
   from '../components/PersonCard.vue';
+
+import familyConfig
+  from '../config/family.config';
 
 
 // ======================================
@@ -1074,7 +1077,7 @@ onUnmounted(() => {
 
   background: transparent;
 
-  color: #922525;
+  color: var(--family-primary);
 
   font-size: 0.84rem;
 
@@ -1156,7 +1159,7 @@ onUnmounted(() => {
 
   border-radius: 8px;
 
-  background: #922525;
+  background: var(--family-primary);
 
   color: #ffffff;
 

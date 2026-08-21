@@ -1,23 +1,71 @@
 <template>
 
-<footer class="bg-light mt-5 py-4 border-top">
+  <footer class="site-footer mt-5 py-4">
 
-<div class="container text-center">
+    <div class="container text-center">
 
-<p class="mb-1">
+      <p class="mb-1 footer-title">
+        © {{ familyConfig.footer.copyrightYear }}
+        {{ familyConfig.siteTitle }}
+      </p>
 
-© 2026 Gia phả dòng họ Nguyễn
+      <small class="footer-description">
+        {{ familyConfig.footer.description }}
+      </small>
 
-</p>
+    </div>
 
-<small class="text-muted">
-
-Website được xây dựng nhằm lưu giữ truyền thống dòng họ.
-
-</small>
-
-</div>
-
-</footer>
+  </footer>
 
 </template>
+
+
+<script setup>
+
+import familyConfig
+  from '../config/family.config';
+
+</script>
+
+
+<style scoped>
+
+.site-footer {
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--family-primary),
+      var(--family-primary-dark)
+    );
+
+  color:
+    var(--family-header-text);
+
+  border-top:
+    3px solid
+    var(--family-accent);
+
+}
+
+
+.footer-title {
+
+  color:
+    var(--family-header-text);
+
+  font-weight: 600;
+
+}
+
+
+.footer-description {
+
+  color:
+    var(--family-header-text);
+
+  opacity: 0.8;
+
+}
+
+</style>
