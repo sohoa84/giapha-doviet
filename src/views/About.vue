@@ -17,9 +17,9 @@
           NGUYỄN XUÂN
         </div>
 
-        <h1>
+        <h2>
           Giới thiệu Chi Vĩnh An
-        </h1>
+        </h2>
 
         <p>
           Nguồn cội • Lịch sử • Nội quy • Tổ chức dòng họ
@@ -464,7 +464,7 @@ onMounted(() => {
 
   color: #922525;
 
-  font-size: 0.7rem;
+  font-size: 0.9rem;
 
   font-weight: 800;
 
