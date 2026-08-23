@@ -107,6 +107,33 @@
 
           <button
             type="button"
+            class="toolbar-button external-button"
+            :class="{ active: showExternal }"
+            @click="showExternal = !showExternal"
+            :title="
+              showExternal
+                ? 'Ẩn hậu duệ nhánh ngoại'
+                : 'Hiện hậu duệ nhánh ngoại'
+            "
+          >
+            <i class="bi bi-diagram-3-fill"></i>
+
+            <span class="desktop-label">
+              {{
+                showExternal
+                  ? 'Đang hiện nhánh ngoại'
+                  : 'Chỉ dòng nội'
+              }}
+            </span>
+
+            <span class="mobile-label">
+              Ngoại
+            </span>
+          </button>
+
+
+          <button
+            type="button"
             class="toolbar-button"
             @click="toggleAll"
           >
@@ -189,6 +216,24 @@
 
           Nữ
 
+        </div>
+
+
+        <div
+          v-if="showExternal"
+          class="legend-item"
+        >
+          <span class="legend-line external-male"></span>
+          Nam ngoại
+        </div>
+
+
+        <div
+          v-if="showExternal"
+          class="legend-item"
+        >
+          <span class="legend-line external-female"></span>
+          Nữ ngoại
         </div>
 
 
@@ -408,6 +453,16 @@
                         ]
                       }}
 
+                    </div>
+
+
+                    <div
+                      v-if="isExternalPerson(family.person)"
+                      class="external-meta-row"
+                    >
+                      <span class="relationship-label label-ngoai">
+                        NGOẠI
+                      </span>
                     </div>
 
 
@@ -708,6 +763,20 @@ const error =
 const showSpouses =
   ref(true);
 
+
+// ======================================
+// HIỂN THỊ NHÁNH NGOẠI
+// ======================================
+//
+// Con gái của dòng họ vẫn là NỘI.
+// Con của người con gái bắt đầu NGOẠI.
+// Từ đó, toàn bộ hậu duệ tiếp tục là NGOẠI.
+//
+
+const showExternal =
+  ref(true);
+
+
 const expandedGenerations =
   ref(new Set());
 
@@ -749,6 +818,9 @@ async function loadGenerationTree() {
         )
 
         .filter(Boolean);
+
+
+    externalMemo.clear();
 
   }
 
@@ -920,6 +992,183 @@ function findPerson(
       person.ID === id
   ) || null;
 
+}
+
+
+// ======================================
+// CHA / MẸ THUỘC CÂY CHÍNH
+// ======================================
+
+function getCoreParentId(
+  person
+) {
+
+  if (!person) {
+    return null;
+  }
+
+  const fatherId =
+    String(
+      person.Father ||
+      person['Cha'] ||
+      ''
+    ).trim();
+
+  const motherId =
+    String(
+      person.Mother ||
+      person['Mẹ'] ||
+      ''
+    ).trim();
+
+  const father =
+    fatherId
+      ? findPerson(fatherId)
+      : null;
+
+  const mother =
+    motherId
+      ? findPerson(motherId)
+      : null;
+
+  const fatherIsCore =
+    father &&
+    !isSpouse(father);
+
+  const motherIsCore =
+    mother &&
+    !isSpouse(mother);
+
+  if (
+    fatherIsCore &&
+    !motherIsCore
+  ) {
+    return fatherId;
+  }
+
+  if (
+    motherIsCore &&
+    !fatherIsCore
+  ) {
+    return motherId;
+  }
+
+  if (fatherIsCore) {
+    return fatherId;
+  }
+
+  if (motherIsCore) {
+    return motherId;
+  }
+
+  return null;
+}
+
+
+// ======================================
+// XÁC ĐỊNH NHÁNH NGOẠI
+// ======================================
+
+const externalMemo =
+  new Map();
+
+
+function isExternalPerson(
+  person,
+  visited = new Set()
+) {
+
+  if (
+    !person ||
+    isSpouse(person)
+  ) {
+    return false;
+  }
+
+  if (
+    externalMemo.has(
+      person.ID
+    )
+  ) {
+    return externalMemo.get(
+      person.ID
+    );
+  }
+
+  if (
+    visited.has(
+      person.ID
+    )
+  ) {
+    return false;
+  }
+
+  const nextVisited =
+    new Set(visited);
+
+  nextVisited.add(
+    person.ID
+  );
+
+  const parentId =
+    getCoreParentId(
+      person
+    );
+
+  if (!parentId) {
+
+    externalMemo.set(
+      person.ID,
+      false
+    );
+
+    return false;
+  }
+
+  const parent =
+    findPerson(
+      parentId
+    );
+
+  if (!parent) {
+
+    externalMemo.set(
+      person.ID,
+      false
+    );
+
+    return false;
+  }
+
+  // Con của một người nữ trong dòng họ
+  // bắt đầu nhánh NGOẠI.
+  if (
+    parent['Giới tính'] ===
+    'Nữ'
+  ) {
+
+    externalMemo.set(
+      person.ID,
+      true
+    );
+
+    return true;
+  }
+
+  // Nếu cha/mẹ core đã là ngoại,
+  // hậu duệ tiếp tục là ngoại.
+  const result =
+    isExternalPerson(
+      parent,
+      nextVisited
+    );
+
+  externalMemo.set(
+    person.ID,
+    result
+  );
+
+  return result;
 }
 
 
@@ -1163,12 +1412,28 @@ function peopleByGeneration(
    */
 
   return corePersons.value.filter(
-    person =>
-      getGeneration(
+    person => {
+
+      const sameGeneration =
+        getGeneration(
+          person
+        ) === Number(
+          generation
+        );
+
+      if (!sameGeneration) {
+        return false;
+      }
+
+      if (showExternal.value) {
+        return true;
+      }
+
+      return !isExternalPerson(
         person
-      ) === Number(
-        generation
-      )
+      );
+
+    }
   );
 
 }
@@ -1350,6 +1615,7 @@ function personCardClass(
   person
 ) {
 
+  // Dâu / Rể
   if (
     isSpouse(
       person
@@ -1360,48 +1626,60 @@ function personCardClass(
       person['Giới tính'] ===
       'Nữ'
     ) {
-
       return 'card-dau';
-
     }
-
 
     if (
       person['Giới tính'] ===
       'Nam'
     ) {
-
       return 'card-re';
-
     }
 
   }
 
 
+  // Nhánh ngoại
+  if (
+    isExternalPerson(
+      person
+    )
+  ) {
+
+    if (
+      person['Giới tính'] ===
+      'Nữ'
+    ) {
+      return 'card-external-female';
+    }
+
+    if (
+      person['Giới tính'] ===
+      'Nam'
+    ) {
+      return 'card-external-male';
+    }
+
+  }
+
+
+  // Dòng nội
   if (
     person['Giới tính'] ===
     'Nam'
   ) {
-
     return 'card-male';
-
   }
-
 
   if (
     person['Giới tính'] ===
     'Nữ'
   ) {
-
     return 'card-female';
-
   }
 
-
   return 'card-unknown';
-
 }
-
 
 // ======================================
 // TOOLTIP
@@ -1454,13 +1732,21 @@ function personTooltip(
       : '';
 
 
+  const branch =
+    !isSpouse(person) &&
+    isExternalPerson(person)
+      ? '\nNhánh: NGOẠI'
+      : '';
+
+
   return (
     `${name}` +
     `${tenTu}` +
     `${gender}` +
     `${birth}` +
     `${death}` +
-    `${relation}`
+    `${relation}` +
+    `${branch}`
   );
 
 }
@@ -1812,6 +2098,17 @@ onMounted(
 }
 
 
+.external-button.active {
+
+  border-color: #7950f2;
+
+  background: #7950f2;
+
+  color: #ffffff;
+
+}
+
+
 .toolbar-info {
 
   color: #6c757d;
@@ -1911,6 +2208,20 @@ onMounted(
 .legend-line.female {
 
   border-color: #f783ac;
+
+}
+
+
+.legend-line.external-male {
+
+  border-color: #7950f2;
+
+}
+
+
+.legend-line.external-female {
+
+  border-color: #f08c46;
 
 }
 
@@ -2205,6 +2516,40 @@ onMounted(
 
 
 /* ===================================== */
+/* NAM NGOẠI - TÍM NÉT LIỀN */
+/* ===================================== */
+
+.card-external-male {
+
+  border-color: #7950f2;
+
+  border-style: solid;
+
+  border-left-width: 4px;
+
+  background: #f3f0ff;
+
+}
+
+
+/* ===================================== */
+/* NỮ NGOẠI - CAM HỒNG NÉT LIỀN */
+/* ===================================== */
+
+.card-external-female {
+
+  border-color: #f08c46;
+
+  border-style: solid;
+
+  border-left-width: 4px;
+
+  background: #fff4e8;
+
+}
+
+
+/* ===================================== */
 /* DÂU / RỂ */
 /* ===================================== */
 
@@ -2461,6 +2806,26 @@ onMounted(
   background: #e7f5ff;
 
   color: #1971c2;
+
+}
+
+
+.label-ngoai {
+
+  border:
+    1px solid
+    #c4b5fd;
+
+  background: #ede9fe;
+
+  color: #5f3dc4;
+
+}
+
+
+.external-meta-row {
+
+  margin-top: 3px;
 
 }
 
