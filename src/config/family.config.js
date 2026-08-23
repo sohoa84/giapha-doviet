@@ -1,6 +1,6 @@
 export default {
   familyName: 'Họ Đỗ',
-  familyShortName: 'Đỗ',
+  familyShortName: 'Đỗ Văn',
   branchName: '',
   branchShortName: '',
 
@@ -13,7 +13,7 @@ export default {
   slogan: 'Uống nước nhớ nguồn - Tôn tổ trong tông',
   heritageQuote: 'Giữ gìn nguồn cội',
 
-  familyCode: 'TV',
+  familyCode: 'DV',
 
   images: {
     banner: 'images/banner.jpg'

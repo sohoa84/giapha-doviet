@@ -1,9 +1,6 @@
 <template>
 
-  <div
-    class="tree-node"
-    :class="nodeClass"
-  >
+  <div class="tree-node">
 
     <!-- ================================= -->
     <!-- VỢ / CHỒNG -->
@@ -20,11 +17,27 @@
         @click="openPerson(node.person.ID)"
       >
 
-        <div class="person-card">
+        <div
+          class="person-card"
+          :class="
+            personCardClass(
+              node.person,
+              node.isExternal
+            )
+          "
+        >
 
           <!-- Avatar -->
 
-          <div class="avatar">
+          <div
+            class="avatar"
+            :class="
+              avatarClass(
+                node.person,
+                node.isExternal
+              )
+            "
+          >
 
             <img
               v-if="node.person.Photo"
@@ -64,6 +77,13 @@
 
             </div>
 
+
+            <div
+              v-if="node.isExternal"
+              class="relationship-label label-ngoai"
+            >
+              NGOẠI
+            </div>
 
             <div class="person-meta">
 
@@ -199,7 +219,7 @@
     <!-- ================================= -->
 
     <div
-      v-if="node.children?.length"
+      v-if="visibleChildren.length"
       class="children-area"
     >
 
@@ -233,10 +253,11 @@
       >
 
         <TreeNode
-          v-for="child in node.children"
+          v-for="child in visibleChildren"
           :key="child.person.ID"
           :node="child"
           :show-spouses="showSpouses"
+          :show-external="showExternal"
         />
 
       </div>
@@ -267,19 +288,18 @@ import {
 const props = defineProps({
 
   node: {
-
     type: Object,
-
     required: true
-
   },
 
   showSpouses: {
-
     type: Boolean,
-
     default: true
+  },
 
+  showExternal: {
+    type: Boolean,
+    default: true
   }
 
 });
@@ -302,30 +322,101 @@ const router =
 
 
 // ======================================
-// NODE CLASS
+// CON ĐƯỢC PHÉP HIỂN THỊ
 // ======================================
 
-const nodeClass =
+const visibleChildren =
   computed(() => {
 
-    const person =
-      props.node.person;
+    const children =
+      props.node.children || [];
 
-    const gender =
-      person?.['Giới tính'];
-
-
-    if (gender === 'Nữ') {
-
-      return 'node-female';
-
+    if (props.showExternal) {
+      return children;
     }
 
-
-    return 'node-male';
+    return children.filter(
+      child =>
+        !child.isExternal
+    );
 
   });
 
+
+// ======================================
+// CLASS CARD NGƯỜI
+// ======================================
+
+function personCardClass(
+  person,
+  isExternal
+) {
+
+  if (isExternal) {
+
+    if (
+      person?.['Giới tính'] === 'Nữ'
+    ) {
+      return 'person-external-female';
+    }
+
+    return 'person-external-male';
+
+  }
+
+  if (
+    person?.['Giới tính'] === 'Nữ'
+  ) {
+    return 'person-female';
+  }
+
+  if (
+    person?.['Giới tính'] === 'Nam'
+  ) {
+    return 'person-male';
+  }
+
+  return 'person-unknown';
+
+}
+
+
+// ======================================
+// CLASS AVATAR
+// ======================================
+function avatarClass(
+  person,
+  isExternal
+) {
+
+  if (isExternal) {
+
+    if (
+      person?.['Giới tính'] === 'Nữ'
+    ) {
+      return 'avatar-external-female';
+    }
+
+    return 'avatar-external-male';
+  }
+
+
+  if (
+    person?.['Giới tính'] === 'Nữ'
+  ) {
+    return 'avatar-female';
+  }
+
+
+  if (
+    person?.['Giới tính'] === 'Nam'
+  ) {
+    return 'avatar-male';
+  }
+
+
+  return '';
+}
 
 // ======================================
 // TOGGLE
@@ -681,15 +772,9 @@ function openPerson(id) {
 /* NAM TRONG HỌ */
 /* ===================================== */
 
-.node-male
-.person-card {
-
-  border-color:
-    #9ec5fe;
-
-  background:
-    #f4f8ff;
-
+.person-card.person-male {
+  border-color: #9ec5fe;
+  background: #f4f8ff;
 }
 
 
@@ -697,15 +782,39 @@ function openPerson(id) {
 /* NỮ TRONG HỌ */
 /* ===================================== */
 
-.node-female
-.person-card {
+.person-card.person-female {
+  border-color: #f1aeb5;
+  background: #fff6f7;
+}
 
-  border-color:
-    #f1aeb5;
 
-  background:
-    #fff6f7;
+/* ===================================== */
+/* NAM NHÁNH NGOẠI */
+/* ===================================== */
 
+.person-card.person-external-male {
+  border-color: #7950f2;
+  background: #f3f0ff;
+}
+
+
+/* ===================================== */
+/* NỮ NHÁNH NGOẠI */
+/* ===================================== */
+
+.person-card.person-external-female {
+  border-color: #f1aeb5;
+  background: #faf5ff;
+}
+
+
+/* ===================================== */
+/* KHÔNG XÁC ĐỊNH */
+/* ===================================== */
+
+.person-card.person-unknown {
+  border-color: #ced4da;
+  background: #ffffff;
 }
 
 
@@ -800,15 +909,9 @@ function openPerson(id) {
 /* AVATAR NAM */
 /* ===================================== */
 
-.node-male
-.avatar {
-
-  background:
-    #dbeafe;
-
-  color:
-    #2563eb;
-
+.avatar.avatar-male {
+  background: #dbeafe;
+  color: #2563eb;
 }
 
 
@@ -816,17 +919,35 @@ function openPerson(id) {
 /* AVATAR NỮ */
 /* ===================================== */
 
-.node-female
-.avatar {
-
-  background:
-    #ffe0e6;
-
-  color:
-    #d6336c;
-
+.avatar.avatar-female {
+  background: #ffe0e6;
+  color: #d6336c;
 }
 
+
+/* ===================================== */
+/* AVATAR NHÁNH NGOẠI */
+/* ===================================== */
+
+.avatar.avatar-external {
+  background: #e5dbff;
+  color: #6741d9;
+}
+
+/* NAM NGOẠI */
+
+.avatar.avatar-external-male {
+  background: #e5dbff;
+  color: #6741d9;
+}
+
+
+/* NỮ NGOẠI */
+
+.avatar.avatar-external-female {
+  background: #ffe8d6;
+  color: #e8590c;
+}
 
 /* ===================================== */
 /* SPOUSE AVATAR */
@@ -1023,6 +1144,17 @@ function openPerson(id) {
   background:
     #e5dbff;
 
+}
+
+
+/* ===================================== */
+/* NGOẠI */
+/* ===================================== */
+
+.label-ngoai {
+  color: #5f3dc4;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
 }
 
 

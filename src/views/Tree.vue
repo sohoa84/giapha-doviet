@@ -115,6 +115,32 @@
 
           </button>
 
+          <button
+            type="button"
+            class="external-toggle"
+            :class="{ active: showExternal }"
+            @click="toggleExternal"
+            :title="
+              showExternal
+                ? 'Ẩn hậu duệ nhánh ngoại'
+                : 'Hiện hậu duệ nhánh ngoại'
+            "
+          >
+            <i class="bi bi-diagram-3-fill"></i>
+
+            <span class="external-label-desktop">
+              {{
+                showExternal
+                  ? 'Đang hiện nhánh ngoại'
+                  : 'Chỉ dòng nội'
+              }}
+            </span>
+
+            <span class="external-label-mobile">
+              Ngoại
+            </span>
+          </button>
+
         </div>
 
 
@@ -196,6 +222,7 @@
             :key="node.person.ID"
             :node="node"
             :show-spouses="showSpouses"
+            :show-external="showExternal"
           />
 
         </div>
@@ -215,6 +242,10 @@
 
         <span>
           🔍 Dùng + / −, ⤢ hoặc chụm 2 ngón tay để zoom
+        </span>
+
+        <span>
+          🟣 Bật/tắt hậu duệ nhánh ngoại
         </span>
 
         <span>
@@ -243,7 +274,8 @@ import {
 } from 'vue';
 
 import {
-  getFamilyOrder
+  getFamilyOrder,
+  getPersons
 } from '../services/dataService';
 
 import TreeNode from '../components/TreeNode.vue';
@@ -267,6 +299,20 @@ const error =
 // ======================================
 
 const showSpouses =
+  ref(true);
+
+
+// ======================================
+// HIỂN THỊ NHÁNH NGOẠI
+// ======================================
+//
+// Con gái của dòng họ vẫn thuộc dòng nội.
+// Con của người con gái đó bắt đầu nhánh ngoại.
+// Một khi đã vào nhánh ngoại thì toàn bộ hậu duệ
+// tiếp tục là nhánh ngoại.
+//
+
+const showExternal =
   ref(true);
 
 
@@ -798,6 +844,27 @@ function handleTouchEnd(event) {
 
 
 // ======================================
+// TOGGLE NHÁNH NGOẠI
+// ======================================
+
+async function toggleExternal() {
+
+  showExternal.value =
+    !showExternal.value;
+
+  await nextTick();
+
+  if (isMobileView()) {
+    await fitToScreen();
+  }
+  else {
+    await centerTree();
+  }
+
+}
+
+
+// ======================================
 // FULLSCREEN
 // ======================================
 
@@ -836,188 +903,492 @@ async function loadTree() {
   try {
 
     loading.value = true;
-
     error.value = '';
 
 
-    const familyOrder =
-  await getFamilyOrder();
+    // ==================================
+    // LOAD THỨ TỰ + TOÀN BỘ PERSON
+    // ==================================
+    //
+    // getFamilyOrder:
+    //   giữ thứ tự vai vế / thứ tự Excel.
+    //
+    // getPersons:
+    //   đảm bảo Tree có đầy đủ mọi người,
+    //   kể cả hậu duệ qua con gái.
+    //
+
+    const [
+      familyOrder,
+      allPersons
+    ] =
+      await Promise.all([
+        getFamilyOrder(),
+        getPersons()
+      ]);
 
 
-// ==================================
-// TẠO MAP NGƯỜI
-// ==================================
+    // ==================================
+    // NHẬN DIỆN DÂU / RỂ
+    // ==================================
 
-const personMap = new Map();
+    function isSpousePerson(person) {
 
-familyOrder.forEach(item => {
-
-  personMap.set(
-    item.person.ID,
-    item.person
-  );
-
-});
-
-
-// ==================================
-// TẠO NODE
-// ==================================
-
-const nodeMap = new Map();
-
-familyOrder.forEach(item => {
-
-  nodeMap.set(
-    item.person.ID,
-    {
-
-      person:
-        item.person,
-
-      depth:
-        item.depth || 0,
-
-      spouses: [],
-
-      children: []
-
-    }
-  );
-
-});
-
-
-// ==================================
-// GẮN DÂU / RỂ
-// ==================================
-
-familyOrder.forEach(item => {
-
-  const person =
-    item.person;
-
-  const node =
-    nodeMap.get(
-      person.ID
-    );
-
-  const spouseIds =
-    person.spouses || [];
-
-
-  spouseIds.forEach(
-    spouseId => {
-
-      const spouse =
-        personMap.get(
-          spouseId
-        );
-
-      if (spouse) {
-
-        node.spouses.push(
-          spouse
-        );
-
+      if (!person?.ID) {
+        return false;
       }
 
+      const id =
+        String(person.ID);
+
+      const father =
+        String(
+          person.Father ||
+          person['Cha'] ||
+          ''
+        ).trim();
+
+      const mother =
+        String(
+          person.Mother ||
+          person['Mẹ'] ||
+          ''
+        ).trim();
+
+      return (
+        /S\d+$/i.test(id) &&
+        !father &&
+        !mother
+      );
+
     }
-  );
-
-});
 
 
-// ==================================
-// GẮN CON
-// ==================================
+    // ==================================
+    // MAP TOÀN BỘ NGƯỜI
+    // ==================================
 
-familyOrder.forEach(item => {
+    const personMap =
+      new Map();
 
-  const person =
-    item.person;
+    allPersons.forEach(person => {
 
-  const node =
-    nodeMap.get(
-      person.ID
-    );
+      personMap.set(
+        person.ID,
+        person
+      );
 
-  const childIds =
-    person.children || [];
+    });
 
 
-  childIds.forEach(
-    childId => {
+    // ==================================
+    // THỨ TỰ THÀNH VIÊN CHÍNH
+    // ==================================
+    //
+    // Không đưa S1/S2/S3 vào node chính.
+    //
+
+    const coreOrder =
+      familyOrder.filter(
+        item =>
+          !isSpousePerson(
+            item.person
+          )
+      );
+
+
+    // ==================================
+    // NODE MAP - CHỈ NGƯỜI CHÍNH
+    // ==================================
+
+    const nodeMap =
+      new Map();
+
+    coreOrder.forEach(item => {
+
+      nodeMap.set(
+        item.person.ID,
+        {
+
+          person:
+            item.person,
+
+          depth:
+            item.depth || 0,
+
+          spouses: [],
+
+          children: [],
+
+          isExternal: false
+
+        }
+      );
+
+    });
+
+
+    // ==================================
+    // GẮN DÂU / RỂ
+    // ==================================
+
+    coreOrder.forEach(item => {
+
+      const person =
+        item.person;
+
+      const node =
+        nodeMap.get(
+          person.ID
+        );
+
+      if (!node) {
+        return;
+      }
+
+
+      /*
+        Ưu tiên spouses[] do converter sinh.
+
+        Nếu một ID không tồn tại hoặc không phải
+        spouse thì bỏ qua.
+      */
+
+      const spouseIds =
+        person.spouses || [];
+
+      spouseIds.forEach(
+        spouseId => {
+
+          const spouse =
+            personMap.get(
+              spouseId
+            );
+
+          if (
+            spouse &&
+            isSpousePerson(spouse) &&
+            !node.spouses.some(
+              item =>
+                item.ID === spouse.ID
+            )
+          ) {
+
+            node.spouses.push(
+              spouse
+            );
+
+          }
+
+        }
+      );
+
+    });
+
+
+    // ==================================
+    // XÁC ĐỊNH "CHA/MẸ THUỘC CÂY CHÍNH"
+    // ==================================
+    //
+    // Đây là phần quan trọng để hỗ trợ NHÁNH NGOẠI.
+    //
+    // Ví dụ:
+    //
+    // Đỗ Thị A         = người trong họ
+    // Trần Văn B S1    = rể
+    //       |
+    //       +-- Con C
+    //
+    // C có:
+    //
+    // Father = ID của rể
+    // Mother = ID của Đỗ Thị A
+    //
+    // Tree phải gắn C dưới Đỗ Thị A,
+    // KHÔNG gắn dưới người rể.
+    //
+
+    function getCoreParentId(
+      person
+    ) {
+
+      if (!person) {
+        return null;
+      }
+
+      const fatherId =
+        String(
+          person.Father ||
+          person['Cha'] ||
+          ''
+        ).trim();
+
+      const motherId =
+        String(
+          person.Mother ||
+          person['Mẹ'] ||
+          ''
+        ).trim();
+
+
+      const father =
+        fatherId
+          ? personMap.get(fatherId)
+          : null;
+
+      const mother =
+        motherId
+          ? personMap.get(motherId)
+          : null;
+
+
+      const fatherIsCore =
+        father &&
+        !isSpousePerson(father) &&
+        nodeMap.has(fatherId);
+
+      const motherIsCore =
+        mother &&
+        !isSpousePerson(mother) &&
+        nodeMap.has(motherId);
+
+
+      // Thông thường chỉ một bên là người của dòng họ.
+      if (
+        fatherIsCore &&
+        !motherIsCore
+      ) {
+        return fatherId;
+      }
+
+
+      if (
+        motherIsCore &&
+        !fatherIsCore
+      ) {
+        return motherId;
+      }
+
+
+      /*
+        Trường hợp hiếm cả Cha và Mẹ đều có node chính:
+        giữ ưu tiên Cha để tương thích cây cũ.
+      */
+
+      if (fatherIsCore) {
+        return fatherId;
+      }
+
+      if (motherIsCore) {
+        return motherId;
+      }
+
+
+      return null;
+
+    }
+
+
+    // ==================================
+    // GẮN CON - MỖI NGƯỜI CHỈ 1 PARENT NODE
+    // ==================================
+    //
+    // Duyệt theo coreOrder để giữ nguyên thứ tự
+    // anh/chị/em từ getFamilyOrder().
+    //
+
+    coreOrder.forEach(item => {
+
+      const child =
+        item.person;
 
       const childNode =
         nodeMap.get(
-          childId
+          child.ID
         );
 
-      if (childNode) {
+      if (!childNode) {
+        return;
+      }
 
-        node.children.push(
+
+      const parentId =
+        getCoreParentId(
+          child
+        );
+
+
+      if (!parentId) {
+        return;
+      }
+
+
+      const parentNode =
+        nodeMap.get(
+          parentId
+        );
+
+
+      if (
+        parentNode &&
+        !parentNode.children.some(
+          node =>
+            node.person.ID ===
+            child.ID
+        )
+      ) {
+
+        parentNode.children.push(
           childNode
         );
 
       }
 
+    });
+
+
+    // ==================================
+    // ĐÁNH DẤU NHÁNH NGOẠI ĐỆ QUY
+    // ==================================
+    //
+    // Quy tắc đã thống nhất:
+    //
+    // 1. Con gái của dòng họ:
+    //       vẫn là NỘI.
+    //
+    // 2. Con của người con gái:
+    //       bắt đầu NGOẠI.
+    //
+    // 3. Từ đó trở xuống:
+    //       tất cả đều NGOẠI.
+    //
+
+    function markExternalBranch(
+      node,
+      inheritedExternal = false
+    ) {
+
+      if (!node) {
+        return;
+      }
+
+
+      node.isExternal =
+        inheritedExternal;
+
+
+      const childrenAreExternal =
+        inheritedExternal ||
+        node.person?.['Giới tính'] ===
+          'Nữ';
+
+
+      (node.children || [])
+        .forEach(child => {
+
+          markExternalBranch(
+            child,
+            childrenAreExternal
+          );
+
+        });
+
     }
-  );
-
-});
-
-// ==================================
-// TÌM ROOT THỰC SỰ
-// ==================================
-
-const roots = familyOrder.filter(item => {
-
-  const person =
-    item.person;
-
-  const father =
-    person.Father;
-
-  const mother =
-    person.Mother;
 
 
-  const hasFather =
-    father &&
-    personMap.has(father);
+    // ==================================
+    // TÌM ROOT THỰC SỰ
+    // ==================================
+    //
+    // Chỉ xét thành viên chính,
+    // không xét dâu/rể S1/S2.
+    //
 
-  const hasMother =
-    mother &&
-    personMap.has(mother);
+    const roots =
+      coreOrder.filter(item => {
 
+        const person =
+          item.person;
 
-  // Người không có cha/mẹ
-  // trong dữ liệu gia phả = ROOT
+        return (
+          !getCoreParentId(person)
+        );
 
-  return !hasFather &&
-         !hasMother;
-
-});
-
-
-// ==================================
-// CHỈ LẤY ROOT ĐẦU TIÊN
-// ==================================
-
-treeNodes.value =
-  roots.length
-    ? [
-        nodeMap.get(
-          roots[0].person.ID
-        )
-      ]
-    : [];
+      });
 
 
-// ==================================
-// CĂN CÂY CHO MÀN HÌNH
-// ==================================
+    // ==================================
+    // GIỮ CÁCH CŨ:
+    // CHỈ LẤY ROOT ĐẦU TIÊN
+    // ==================================
+
+    const rootNode =
+      roots.length
+        ? nodeMap.get(
+            roots[0].person.ID
+          )
+        : null;
+
+
+    if (rootNode) {
+
+      markExternalBranch(
+        rootNode,
+        false
+      );
+
+    }
+
+
+    treeNodes.value =
+      rootNode
+        ? [rootNode]
+        : [];
+
+
+    // ==================================
+    // DEBUG NHÁNH NGOẠI
+    // ==================================
+
+    const allCoreNodes =
+      Array.from(
+        nodeMap.values()
+      );
+
+    const externalNodes =
+      allCoreNodes.filter(
+        node =>
+          node.isExternal
+      );
+
+
+    console.log(
+      'TREE ROOT:',
+      rootNode?.person?.ID || ''
+    );
+
+    console.log(
+      'CORE PERSONS:',
+      allCoreNodes.length
+    );
+
+    console.log(
+      'EXTERNAL PERSONS:',
+      externalNodes.length
+    );
+
+    console.log(
+      'EXTERNAL IDS:',
+      externalNodes.map(
+        node =>
+          node.person.ID
+      )
+    );
+
+
+    // ==================================
+    // CĂN CÂY CHO MÀN HÌNH
+    // ==================================
 
     await nextTick();
 
@@ -1029,33 +1400,7 @@ treeNodes.value =
       await centerTree();
     }
 
-
-// ==================================
-// DEBUG
-// ==================================
-
-    console.log(
-    'ROOT CANDIDATES:',
-    roots.map(item =>
-        item.person.ID
-    )
-    );
-
-    console.log(
-    'ACTUAL ROOT:',
-    treeNodes.value.map(node =>
-        node.person.ID
-    )
-    );
-
-    console.log(
-    'Tree total:',
-    familyOrder.length
-    );
-
-
   }
-
   catch (err) {
 
     console.error(err);
@@ -1065,15 +1410,14 @@ treeNodes.value =
       'Không thể xây dựng cây gia phả';
 
   }
-
   finally {
 
-    loading.value = false;
+    loading.value =
+      false;
 
   }
 
 }
-
 
 // ======================================
 // INIT
@@ -1194,7 +1538,8 @@ onUnmounted(() => {
 /* SPOUSE TOGGLE */
 /* ===================================== */
 
-.spouse-toggle {
+.spouse-toggle,
+.external-toggle {
   height: 34px;
   display: inline-flex;
   align-items: center;
@@ -1216,7 +1561,14 @@ onUnmounted(() => {
   color: #ffffff;
 }
 
-.spouse-label-mobile {
+.external-toggle.active {
+  border-color: #7950f2;
+  background: #7950f2;
+  color: #ffffff;
+}
+
+.spouse-label-mobile,
+.external-label-mobile {
   display: none;
 }
 
@@ -1376,7 +1728,8 @@ onUnmounted(() => {
     display: none;
   }
 
-  .spouse-toggle {
+  .spouse-toggle,
+  .external-toggle {
     height: 36px;
     min-width: 42px;
     padding: 0 8px;
@@ -1384,15 +1737,18 @@ onUnmounted(() => {
     font-size: 0.72rem;
   }
 
-  .spouse-toggle .bi {
+  .spouse-toggle .bi,
+  .external-toggle .bi {
     font-size: 14px;
   }
 
-  .spouse-label-desktop {
+  .spouse-label-desktop,
+  .external-label-desktop {
     display: none;
   }
 
-  .spouse-label-mobile {
+  .spouse-label-mobile,
+  .external-label-mobile {
     display: inline;
   }
 
@@ -1443,11 +1799,13 @@ onUnmounted(() => {
 
 @media (max-width: 390px) {
 
-  .spouse-label-mobile {
+  .spouse-label-mobile,
+  .external-label-mobile {
     display: none;
   }
 
-  .spouse-toggle {
+  .spouse-toggle,
+  .external-toggle {
     min-width: 36px;
     padding: 0 6px;
   }
