@@ -11,7 +11,7 @@
       <div>
 
         <h1>
-          Thành viên {{ familyConfig.familyName }}
+          Thành viên họ Nguyễn Xuân
         </h1>
 
         <p>
@@ -74,7 +74,7 @@
         <input
           v-model="searchKeyword"
           type="search"
-          :placeholder="`Tìm tên, Tên Tự hoặc mã ${familyConfig.familyCode}...`"
+          placeholder="Tìm tên, Tên Tự hoặc mã VA..."
         >
 
         <button
@@ -145,6 +145,34 @@
 
             <option value="Nữ">
               Nữ
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="filter-item">
+
+          <label for="branch">
+            Nhánh
+          </label>
+
+          <select
+            id="branch"
+            v-model="selectedBranch"
+          >
+
+            <option value="">
+              Tất cả
+            </option>
+
+            <option value="noi">
+              Dòng nội
+            </option>
+
+            <option value="ngoai">
+              Nhánh ngoại
             </option>
 
           </select>
@@ -278,9 +306,6 @@ import {
 import PersonCard
   from '../components/PersonCard.vue';
 
-import familyConfig
-  from '../config/family.config';
-
 
 // ======================================
 // DATA
@@ -302,6 +327,9 @@ const selectedGeneration =
   ref('');
 
 const selectedGender =
+  ref('');
+
+const selectedBranch =
   ref('');
 
 const showBackToTop =
@@ -428,6 +456,186 @@ function getSpouseNumber(spouseId) {
 
 
 // ======================================
+// TÌM NGƯỜI THEO ID
+// ======================================
+
+function findPerson(id) {
+
+  if (!id) {
+    return null;
+  }
+
+  return persons.value.find(
+    person =>
+      person.ID === id
+  ) || null;
+
+}
+
+
+// ======================================
+// CHA / MẸ THUỘC CÂY CHÍNH
+// ======================================
+
+function getCoreParentId(person) {
+
+  if (!person) {
+    return null;
+  }
+
+  const fatherId =
+    String(
+      person.Father ||
+      person['Cha'] ||
+      ''
+    ).trim();
+
+  const motherId =
+    String(
+      person.Mother ||
+      person['Mẹ'] ||
+      ''
+    ).trim();
+
+  const father =
+    fatherId
+      ? findPerson(fatherId)
+      : null;
+
+  const mother =
+    motherId
+      ? findPerson(motherId)
+      : null;
+
+  const fatherIsCore =
+    father &&
+    !isSpouse(father);
+
+  const motherIsCore =
+    mother &&
+    !isSpouse(mother);
+
+  if (
+    fatherIsCore &&
+    !motherIsCore
+  ) {
+    return fatherId;
+  }
+
+  if (
+    motherIsCore &&
+    !fatherIsCore
+  ) {
+    return motherId;
+  }
+
+  if (fatherIsCore) {
+    return fatherId;
+  }
+
+  if (motherIsCore) {
+    return motherId;
+  }
+
+  return null;
+
+}
+
+
+// ======================================
+// NHÁNH NGOẠI
+// ======================================
+
+const externalMemo =
+  new Map();
+
+
+function isExternalPerson(
+  person,
+  visited = new Set()
+) {
+
+  if (
+    !person ||
+    isSpouse(person)
+  ) {
+    return false;
+  }
+
+  if (
+    externalMemo.has(person.ID)
+  ) {
+    return externalMemo.get(person.ID);
+  }
+
+  if (
+    visited.has(person.ID)
+  ) {
+    return false;
+  }
+
+  const nextVisited =
+    new Set(visited);
+
+  nextVisited.add(person.ID);
+
+  const parentId =
+    getCoreParentId(person);
+
+  if (!parentId) {
+
+    externalMemo.set(
+      person.ID,
+      false
+    );
+
+    return false;
+  }
+
+  const parent =
+    findPerson(parentId);
+
+  if (!parent) {
+
+    externalMemo.set(
+      person.ID,
+      false
+    );
+
+    return false;
+  }
+
+  // Con của người nữ trong dòng họ
+  // bắt đầu nhánh NGOẠI.
+  if (
+    parent['Giới tính'] === 'Nữ'
+  ) {
+
+    externalMemo.set(
+      person.ID,
+      true
+    );
+
+    return true;
+  }
+
+  const result =
+    isExternalPerson(
+      parent,
+      nextVisited
+    );
+
+  externalMemo.set(
+    person.ID,
+    result
+  );
+
+  return result;
+
+}
+
+
+// ======================================
 // TÌM VỢ / CHỒNG CỦA MỘT NGƯỜI
 // ======================================
 
@@ -502,17 +710,28 @@ const orderedPersons =
     corePersons.value.forEach(
       person => {
 
-        result.push(person);
+        const external =
+          isExternalPerson(
+            person
+          );
 
+        result.push({
+          ...person,
+          _isExternal: external
+        });
 
         const spouses =
           getSpousesForPerson(
             person
           );
 
-
         result.push(
-          ...spouses
+          ...spouses.map(
+            spouse => ({
+              ...spouse,
+              _familyExternal: external
+            })
+          )
         );
 
       }
@@ -570,6 +789,57 @@ const filteredPersons =
 
 
         // ------------------------------
+        // BRANCH
+        // ------------------------------
+
+        let matchBranch =
+          true;
+
+        if (
+          selectedBranch.value
+        ) {
+
+          // Thành viên chính:
+          //   dùng _isExternal
+          //
+          // Dâu / Rể:
+          //   đi theo nhánh của người phối ngẫu
+          //   dùng _familyExternal
+
+          const personIsExternal =
+            isSpouse(person)
+              ? Boolean(
+                  person._familyExternal
+                )
+              : Boolean(
+                  person._isExternal
+                );
+
+
+          if (
+            selectedBranch.value === 'ngoai'
+          ) {
+
+            matchBranch =
+              personIsExternal;
+
+          }
+
+
+          if (
+            selectedBranch.value === 'noi'
+          ) {
+
+            matchBranch =
+              !personIsExternal;
+
+          }
+
+        }
+
+
+
+        // ------------------------------
         // SEARCH
         // ------------------------------
 
@@ -596,6 +866,7 @@ const filteredPersons =
         return (
           matchGeneration &&
           matchGender &&
+          matchBranch &&
           matchKeyword
         );
 
@@ -653,6 +924,9 @@ const hasFilter =
       ) ||
       Boolean(
         selectedGender.value
+      ) ||
+      Boolean(
+        selectedBranch.value
       )
     );
 
@@ -721,6 +995,9 @@ async function loadPersons() {
           };
 
         });
+
+
+    externalMemo.clear();
 
   }
   catch (err) {
@@ -968,7 +1245,7 @@ onUnmounted(() => {
 
   grid-template-columns:
     repeat(
-      2,
+      3,
       minmax(0, 1fr)
     );
 
@@ -1077,7 +1354,7 @@ onUnmounted(() => {
 
   background: transparent;
 
-  color: var(--family-primary);
+  color: #922525;
 
   font-size: 0.84rem;
 
@@ -1159,7 +1436,7 @@ onUnmounted(() => {
 
   border-radius: 8px;
 
-  background: var(--family-primary);
+  background: #922525;
 
   color: #ffffff;
 
@@ -1265,6 +1542,13 @@ onUnmounted(() => {
   .page-header p {
 
     font-size: 0.84rem;
+
+  }
+
+
+  .filter-grid {
+
+    grid-template-columns: 1fr;
 
   }
 

@@ -14,12 +14,12 @@
 
       <div>
         <div class="eyebrow">
-          {{ familyConfig.heroTitle }}
+          NGUYỄN XUÂN
         </div>
 
-        <h2>
-          Giới thiệu {{ familyConfig.branchName }}
-        </h2>
+        <h1>
+          Giới thiệu Chi Vĩnh An
+        </h1>
 
         <p>
           Nguồn cội • Lịch sử • Nội quy • Tổ chức dòng họ
@@ -74,7 +74,7 @@
 
         <div>
           <div class="document-label">
-            GIỚI THIỆU {{ familyConfig.branchName.toUpperCase() }}
+            GIỚI THIỆU CHI VĨNH AN
           </div>
 
           <h2>
@@ -150,9 +150,6 @@ import {
 
 import MarkdownIt
   from 'markdown-it';
-
-import familyConfig
-  from '../config/family.config';
 
 
 import loinoidauMarkdown
@@ -361,52 +358,6 @@ onMounted(() => {
 <style scoped>
 
 /* ===================================== */
-/* ẢNH TRONG BÀI VIẾT MARKDOWN */
-/* ===================================== */
-
-.markdown-content :deep(img) {
-
-  display: block;
-
-  width: 100%;
-
-  max-width: 760px;
-
-  height: auto;
-
-  margin:
-    22px auto
-    8px;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 4px 16px
-    rgba(0, 0, 0, 0.12);
-
-}
-
-
-/* Dòng chữ nghiêng ngay sau ảnh
-   dùng làm chú thích ảnh */
-
-.markdown-content :deep(img + em) {
-
-  display: block;
-
-  margin:
-    0 auto
-    22px;
-
-  color: #8a8178;
-
-  font-size: 0.78rem;
-
-  text-align: center;
-
-}
-
-/* ===================================== */
 /* PAGE */
 /* ===================================== */
 
@@ -465,9 +416,9 @@ onMounted(() => {
 
   margin-bottom: 2px;
 
-  color: var(--family-primary);
+  color: #922525;
 
-  font-size: 0.9rem;
+  font-size: 0.7rem;
 
   font-weight: 800;
 
@@ -583,9 +534,9 @@ onMounted(() => {
 
 .tab-button.active {
 
-  border-color: var(--family-primary);
+  border-color: #922525;
 
-  background: var(--family-primary);
+  background: #922525;
 
   color: #ffffff;
 
@@ -717,7 +668,7 @@ onMounted(() => {
     6px 0
     20px;
 
-  color: var(--family-primary);
+  color: #7c2020;
 
   font-family:
     Georgia,
@@ -745,7 +696,7 @@ onMounted(() => {
     1px solid
     #ede4d9;
 
-  color: var(--family-primary);
+  color: #7c2020;
 
   font-family:
     Georgia,
@@ -763,7 +714,7 @@ onMounted(() => {
     24px 0
     8px;
 
-  color: var(--family-primary);
+  color: #7c2020;
 
   font-size: 1.05rem;
 
@@ -826,7 +777,7 @@ onMounted(() => {
 
   border-left:
     4px solid
-    var(--family-primary);
+    #922525;
 
   border-radius:
     0 10px
@@ -931,7 +882,7 @@ onMounted(() => {
 
   display: block;
 
-  color: var(--family-primary);
+  color: #922525;
 
   font-size: 0.82rem;
 
@@ -940,7 +891,7 @@ onMounted(() => {
 
 .nav-section-button > span {
 
-  color: var(--family-primary);
+  color: #922525;
 
   font-size: 20px;
 

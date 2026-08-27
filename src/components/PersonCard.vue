@@ -81,6 +81,14 @@
 
 
         <div
+          v-if="person._isExternal"
+          class="branch-label label-ngoai"
+        >
+          NGOẠI
+        </div>
+
+
+        <div
           v-if="lifeText"
           class="person-life"
         >
@@ -233,78 +241,57 @@ const genderClass =
         props.person.ID || ''
       );
 
-
-    // ==================================
-    // KIỂM TRA DÂU / RỂ
-    // ==================================
-    //
-    // Quy ước dự án:
-    // VA-10.02S1
-    // VA-10.02S2
-    // ...
-    //
-    // Đồng thời Cha và Mẹ đều trống.
-    //
-
     const isSpouse =
       /S\d+$/i.test(id) &&
       !props.person['Cha'] &&
-      !props.person['Mẹ'];
+      !props.person['Mẹ'] &&
+      !props.person.Father &&
+      !props.person.Mother;
 
-
-    // ==================================
-    // DÂU
-    // Nữ + spouse
-    // ==================================
 
     if (
       isSpouse &&
       props.person['Giới tính'] === 'Nữ'
     ) {
-
       return 'person-daughter-in-law';
-
     }
 
-
-    // ==================================
-    // RỂ
-    // Nam + spouse
-    // ==================================
 
     if (
       isSpouse &&
       props.person['Giới tính'] === 'Nam'
     ) {
-
       return 'person-son-in-law';
-
     }
 
 
-    // ==================================
-    // NAM CHÍNH / CON TRAI
-    // ==================================
+    if (
+      props.person._isExternal &&
+      props.person['Giới tính'] === 'Nam'
+    ) {
+      return 'person-external-male';
+    }
+
+
+    if (
+      props.person._isExternal &&
+      props.person['Giới tính'] === 'Nữ'
+    ) {
+      return 'person-external-female';
+    }
+
 
     if (
       props.person['Giới tính'] === 'Nam'
     ) {
-
       return 'person-male';
-
     }
 
-
-    // ==================================
-    // NỮ CHÍNH / CON GÁI
-    // ==================================
 
     if (
       props.person['Giới tính'] === 'Nữ'
     ) {
-
       return 'person-female';
-
     }
 
 
@@ -393,15 +380,54 @@ const genderClass =
 
 }
 
+
+/* ===================================== */
+/* NAM NGOẠI - TÍM NÉT LIỀN */
+/* ===================================== */
+
+.person-external-male {
+
+  border-color: #7950f2;
+
+  border-style: solid;
+
+  border-left-width: 4px;
+
+  background: #f3f0ff;
+
+}
+
+
+/* ===================================== */
+/* NỮ NGOẠI - CAM HỒNG NÉT LIỀN */
+/* ===================================== */
+
+.person-external-female {
+
+  border-color: #f08c46;
+
+  border-style: solid;
+
+  border-left-width: 4px;
+
+  background: #fff4e8;
+
+}
+
+
 /* ===================================== */
 /* DÂU - HỒNG NÉT ĐỨT */
 /* ===================================== */
 
 .person-daughter-in-law {
 
-  border-left-color: #f783ac;
+  border-color: #f783ac;
 
-  border-left-style: dashed;
+  border-style: dashed;
+
+  border-left-width: 4px;
+
+  background: #fff8fb;
 
 }
 
@@ -412,9 +438,13 @@ const genderClass =
 
 .person-son-in-law {
 
-  border-left-color: #4dabf7;
+  border-color: #7950f2;
 
-  border-left-style: dashed;
+  border-style: dashed;
+
+  border-left-width: 4px;
+
+  background: #f7f3ff;
 
 }
 
@@ -564,6 +594,41 @@ const genderClass =
   font-size: 0.77rem;
 
 }
+
+
+/* ===================================== */
+/* NHÃN NHÁNH NGOẠI */
+/* ===================================== */
+
+.branch-label {
+
+  display: inline-flex;
+
+  margin-top: 4px;
+
+  padding: 1px 6px;
+
+  border-radius: 999px;
+
+  font-size: 0.58rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+
+}
+
+
+.label-ngoai {
+
+  border: 1px solid #c4b5fd;
+
+  background: #ede9fe;
+
+  color: #5f3dc4;
+
+}
+
 
 
 /* ===================================== */

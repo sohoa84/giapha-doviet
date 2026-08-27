@@ -301,6 +301,176 @@
 
 
       <!-- =================================== -->
+      <!-- ANCESTOR LINE -->
+      <!-- =================================== -->
+
+      <section
+        v-if="ancestorLine.length"
+        class="detail-section ancestor-section"
+      >
+
+        <div class="ancestor-section-header">
+
+          <h2 class="section-title ancestor-title">
+
+            <i class="bi bi-diagram-3-fill"></i>
+
+            Dòng tổ tiên
+
+            <span class="section-count">
+              {{ ancestorLine.length }} đời
+            </span>
+
+          </h2>
+
+
+          <button
+            type="button"
+            class="view-full-tree"
+            @click="openFullTree"
+          >
+
+            <i class="bi bi-tree"></i>
+
+            Xem cây đầy đủ
+
+          </button>
+
+        </div>
+
+
+        <div class="ancestor-description">
+
+          Đường gia phả từ đời đầu đến
+          <strong>{{ fullName }}</strong>.
+
+          <span
+            v-if="
+              person &&
+              person._isExternal
+            "
+            class="ancestor-external-note"
+          >
+            Nhánh ngoại được đánh dấu theo màu quy ước.
+          </span>
+
+        </div>
+
+
+        <div class="ancestor-line">
+
+          <div
+            v-for="(item, index) in ancestorLine"
+            :key="item.person.ID"
+            class="ancestor-step"
+          >
+
+            <!-- CONNECTOR -->
+
+            <div
+              v-if="index > 0"
+              class="ancestor-connector"
+              aria-hidden="true"
+            >
+              <span class="connector-line"></span>
+              <span class="connector-arrow">▼</span>
+            </div>
+
+
+            <!-- GENERATION LABEL -->
+
+            <div class="ancestor-generation">
+
+              ĐỜI
+              {{
+                item.person.generation ||
+                item.person['Đời'] ||
+                index + 1
+              }}
+
+            </div>
+
+
+            <!-- FAMILY ROW -->
+
+            <div
+              class="ancestor-family-row"
+              :class="{
+                'ancestor-current-row':
+                  item.isCurrentGeneration
+              }"
+            >
+
+              <div class="ancestor-person-wrap">
+
+                <div
+                  v-if="item.isCurrentCore"
+                  class="current-person-label"
+                >
+                  ĐANG XEM
+                </div>
+
+                <PersonCard
+                  :person="item.person"
+                />
+
+              </div>
+
+
+              <template
+                v-if="item.spouses.length"
+              >
+
+                <div class="ancestor-marriage-link">
+
+                  <span class="marriage-line"></span>
+
+                  <span class="heart">
+                    ♥
+                  </span>
+
+                  <span class="marriage-line"></span>
+
+                </div>
+
+
+                <div class="ancestor-spouses">
+
+                  <div
+                    v-for="spouse in item.spouses"
+                    :key="spouse.ID"
+                    class="ancestor-person-wrap"
+                  >
+
+                    <div
+                      v-if="
+                        spouse.ID === currentViewedSpouseId
+                      "
+                      class="current-person-label"
+                    >
+                      ĐANG XEM
+                    </div>
+
+                    <PersonCard
+                      :person="spouse"
+                    />
+
+                  </div>
+
+                </div>
+
+              </template>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================== -->
       <!-- BIOGRAPHY -->
       <!-- =================================== -->
 
@@ -506,7 +676,8 @@ import {
 
 
 import {
-  useRoute
+  useRoute,
+  useRouter
 } from 'vue-router';
 
 
@@ -514,7 +685,8 @@ import {
   getPerson,
   getParents,
   getChildren,
-  getSpouses
+  getSpouses,
+  getFamilyOrder
 } from '../services/dataService';
 
 
@@ -528,6 +700,9 @@ import PersonCard
 
 const route =
   useRoute();
+
+const router =
+  useRouter();
 
 
 // ======================================
@@ -546,11 +721,517 @@ const children =
 const spouses =
   ref([]);
 
+const allPersons =
+  ref([]);
+
 const loading =
   ref(true);
 
 const error =
   ref('');
+
+
+// ======================================
+// NHẬN DIỆN DÂU / RỂ
+// ======================================
+
+function isSpousePerson(item) {
+
+  if (!item?.ID) {
+    return false;
+  }
+
+  const id =
+    String(item.ID);
+
+  const father =
+    String(
+      item.Father ||
+      item['Cha'] ||
+      ''
+    ).trim();
+
+  const mother =
+    String(
+      item.Mother ||
+      item['Mẹ'] ||
+      ''
+    ).trim();
+
+  return (
+    /S\d+$/i.test(id) &&
+    !father &&
+    !mother
+  );
+
+}
+
+
+// ======================================
+// TÌM NGƯỜI THEO ID
+// ======================================
+
+function findPerson(id) {
+
+  if (!id) {
+    return null;
+  }
+
+  return allPersons.value.find(
+    item =>
+      item.ID === id
+  ) || null;
+
+}
+
+
+// ======================================
+// CHA / MẸ THUỘC CÂY CHÍNH
+// ======================================
+
+function getCoreParentId(item) {
+
+  if (!item) {
+    return null;
+  }
+
+  const fatherId =
+    String(
+      item.Father ||
+      item['Cha'] ||
+      ''
+    ).trim();
+
+  const motherId =
+    String(
+      item.Mother ||
+      item['Mẹ'] ||
+      ''
+    ).trim();
+
+  const father =
+    fatherId
+      ? findPerson(fatherId)
+      : null;
+
+  const mother =
+    motherId
+      ? findPerson(motherId)
+      : null;
+
+  const fatherIsCore =
+    father &&
+    !isSpousePerson(father);
+
+  const motherIsCore =
+    mother &&
+    !isSpousePerson(mother);
+
+  if (
+    fatherIsCore &&
+    !motherIsCore
+  ) {
+    return fatherId;
+  }
+
+  if (
+    motherIsCore &&
+    !fatherIsCore
+  ) {
+    return motherId;
+  }
+
+  if (fatherIsCore) {
+    return fatherId;
+  }
+
+  if (motherIsCore) {
+    return motherId;
+  }
+
+  return null;
+
+}
+
+
+// ======================================
+// NHÁNH NGOẠI
+// ======================================
+
+const externalMemo =
+  new Map();
+
+
+function isExternalPerson(
+  item,
+  visited = new Set()
+) {
+
+  if (
+    !item ||
+    isSpousePerson(item)
+  ) {
+    return false;
+  }
+
+  if (
+    externalMemo.has(item.ID)
+  ) {
+    return externalMemo.get(
+      item.ID
+    );
+  }
+
+  if (
+    visited.has(item.ID)
+  ) {
+    return false;
+  }
+
+  const nextVisited =
+    new Set(visited);
+
+  nextVisited.add(
+    item.ID
+  );
+
+  const parentId =
+    getCoreParentId(item);
+
+  if (!parentId) {
+
+    externalMemo.set(
+      item.ID,
+      false
+    );
+
+    return false;
+  }
+
+  const parent =
+    findPerson(parentId);
+
+  if (!parent) {
+
+    externalMemo.set(
+      item.ID,
+      false
+    );
+
+    return false;
+  }
+
+  // Con của người nữ trong dòng họ
+  // bắt đầu nhánh NGOẠI.
+  if (
+    parent['Giới tính'] ===
+    'Nữ'
+  ) {
+
+    externalMemo.set(
+      item.ID,
+      true
+    );
+
+    return true;
+  }
+
+  // Nếu cha/mẹ core đã là ngoại
+  // thì hậu duệ tiếp tục là ngoại.
+  const result =
+    isExternalPerson(
+      parent,
+      nextVisited
+    );
+
+  externalMemo.set(
+    item.ID,
+    result
+  );
+
+  return result;
+
+}
+
+
+// ======================================
+// TRANG TRÍ PERSON CHO PERSONCARD
+// ======================================
+
+function decoratePerson(item) {
+
+  if (!item) {
+    return item;
+  }
+
+  return {
+    ...item,
+
+    _isExternal:
+      isExternalPerson(item)
+  };
+
+}
+
+
+// ======================================
+// ID NGƯỜI GỐC CỦA DÂU / RỂ
+// ======================================
+
+function getBasePersonId(
+  spouseId
+) {
+
+  if (!spouseId) {
+    return null;
+  }
+
+  const match =
+    String(spouseId)
+      .match(
+        /^(.+)S\d+$/i
+      );
+
+  return match
+    ? match[1]
+    : null;
+
+}
+
+
+// ======================================
+// DANH SÁCH VỢ / CHỒNG CỦA CORE PERSON
+// ======================================
+
+function getSpousesForCorePerson(
+  corePerson
+) {
+
+  if (!corePerson?.ID) {
+    return [];
+  }
+
+  const baseId =
+    String(
+      corePerson.ID
+    );
+
+  return allPersons.value
+    .filter(candidate => {
+
+      if (
+        !isSpousePerson(
+          candidate
+        )
+      ) {
+        return false;
+      }
+
+      return (
+        getBasePersonId(
+          candidate.ID
+        ) === baseId
+      );
+
+    })
+    .sort((a, b) => {
+
+      const aMatch =
+        String(a.ID)
+          .match(/S(\d+)$/i);
+
+      const bMatch =
+        String(b.ID)
+          .match(/S(\d+)$/i);
+
+      const aNumber =
+        aMatch
+          ? Number(aMatch[1])
+          : 0;
+
+      const bNumber =
+        bMatch
+          ? Number(bMatch[1])
+          : 0;
+
+      return (
+        aNumber -
+        bNumber
+      );
+
+    })
+    .map(
+      decoratePerson
+    );
+
+}
+
+
+// ======================================
+// NGƯỜI CORE ĐẠI DIỆN CHO TRANG ĐANG XEM
+// ======================================
+//
+// Nếu đang xem dâu / rể S1, S2...
+// thì dòng tổ tiên sẽ đi theo người
+// mà họ kết hôn cùng.
+//
+
+const currentCorePerson =
+  computed(() => {
+
+    if (!person.value) {
+      return null;
+    }
+
+    if (
+      !isSpousePerson(
+        person.value
+      )
+    ) {
+      return person.value;
+    }
+
+    const baseId =
+      getBasePersonId(
+        person.value.ID
+      );
+
+    const basePerson =
+      findPerson(
+        baseId
+      );
+
+    return basePerson
+      ? decoratePerson(
+          basePerson
+        )
+      : null;
+
+  });
+
+
+const currentViewedSpouseId =
+  computed(() => {
+
+    if (
+      person.value &&
+      isSpousePerson(
+        person.value
+      )
+    ) {
+      return person.value.ID;
+    }
+
+    return '';
+
+  });
+
+
+// ======================================
+// DÒNG TỔ TIÊN TỪ ROOT → NGƯỜI ĐANG XEM
+// ======================================
+//
+// Đi ngược từ currentCorePerson:
+// current → parent core → parent core...
+// rồi reverse để được:
+// root → ... → current.
+//
+
+const ancestorLine =
+  computed(() => {
+
+    const target =
+      currentCorePerson.value;
+
+    if (!target) {
+      return [];
+    }
+
+    const reversePath =
+      [];
+
+    const visited =
+      new Set();
+
+    let current =
+      target;
+
+
+    while (
+      current &&
+      !visited.has(
+        current.ID
+      )
+    ) {
+
+      visited.add(
+        current.ID
+      );
+
+      reversePath.push(
+        decoratePerson(
+          current
+        )
+      );
+
+
+      const parentId =
+        getCoreParentId(
+          current
+        );
+
+
+      if (!parentId) {
+        break;
+      }
+
+
+      current =
+        findPerson(
+          parentId
+        );
+
+    }
+
+
+    return reversePath
+      .reverse()
+      .map(corePerson => ({
+
+        person:
+          decoratePerson(
+            corePerson
+          ),
+
+        spouses:
+          getSpousesForCorePerson(
+            corePerson
+          ),
+
+        isCurrentCore:
+          corePerson.ID ===
+          target.ID,
+
+        isCurrentGeneration:
+          corePerson.ID ===
+          target.ID
+
+      }));
+
+  });
+
+
+// ======================================
+// MỞ CÂY GIA PHẢ ĐẦY ĐỦ
+// ======================================
+
+function openFullTree() {
+
+  router.push(
+    '/tree'
+  );
+
+}
 
 
 // ======================================
@@ -717,6 +1398,27 @@ const personRole =
     }
 
 
+    if (
+      person.value._isExternal
+    ) {
+
+      if (
+        person.value['Giới tính'] ===
+        'Nam'
+      ) {
+        return 'Nam ngoại';
+      }
+
+      if (
+        person.value['Giới tính'] ===
+        'Nữ'
+      ) {
+        return 'Nữ ngoại';
+      }
+
+    }
+
+
     return (
       person.value['Giới tính'] ||
       'Thành viên'
@@ -756,6 +1458,27 @@ const personTypeClass =
 
         return 'profile-re';
 
+      }
+
+    }
+
+
+    if (
+      person.value._isExternal
+    ) {
+
+      if (
+        person.value['Giới tính'] ===
+        'Nam'
+      ) {
+        return 'profile-external-male';
+      }
+
+      if (
+        person.value['Giới tính'] ===
+        'Nữ'
+      ) {
+        return 'profile-external-female';
       }
 
     }
@@ -817,6 +1540,27 @@ const genderBadgeClass =
 
         return 'badge-re';
 
+      }
+
+    }
+
+
+    if (
+      person.value._isExternal
+    ) {
+
+      if (
+        person.value['Giới tính'] ===
+        'Nam'
+      ) {
+        return 'badge-external-male';
+      }
+
+      if (
+        person.value['Giới tính'] ===
+        'Nữ'
+      ) {
+        return 'badge-external-female';
       }
 
     }
@@ -930,6 +1674,25 @@ async function loadPerson() {
       route.params.id;
 
 
+    // Cần toàn bộ persons để xác định
+    // chính xác Nội / Ngoại.
+
+    const familyOrder =
+      await getFamilyOrder();
+
+
+    allPersons.value =
+      (familyOrder || [])
+        .map(
+          item =>
+            item?.person
+        )
+        .filter(Boolean);
+
+
+    externalMemo.clear();
+
+
     const result =
       await getPerson(id);
 
@@ -944,19 +1707,39 @@ async function loadPerson() {
 
 
     person.value =
-      result;
+      decoratePerson(
+        result
+      );
 
 
-    parents.value =
+    const parentResult =
       await getParents(id);
 
+    parents.value =
+      (parentResult || [])
+        .map(
+          decoratePerson
+        );
 
-    children.value =
+
+    const childResult =
       await getChildren(id);
 
+    children.value =
+      (childResult || [])
+        .map(
+          decoratePerson
+        );
+
+
+    const spouseResult =
+      await getSpouses(id);
 
     spouses.value =
-      await getSpouses(id);
+      (spouseResult || [])
+        .map(
+          decoratePerson
+        );
 
   }
 
@@ -1096,6 +1879,40 @@ watch(
 
 
 /* ===================================== */
+/* NAM NGOẠI - TÍM NÉT LIỀN */
+/* ===================================== */
+
+.profile-external-male {
+
+  border-color: #7950f2;
+
+  border-style: solid;
+
+  border-left-width: 5px;
+
+  background: #f3f0ff;
+
+}
+
+
+/* ===================================== */
+/* NỮ NGOẠI - CAM HỒNG NÉT LIỀN */
+/* ===================================== */
+
+.profile-external-female {
+
+  border-color: #f08c46;
+
+  border-style: solid;
+
+  border-left-width: 5px;
+
+  background: #fff4e8;
+
+}
+
+
+/* ===================================== */
 /* DÂU / RỂ */
 /* ===================================== */
 
@@ -1107,16 +1924,20 @@ watch(
 
   border-left-width: 5px;
 
+  background: #fff8fb;
+
 }
 
 
 .profile-re {
 
-  border-color: #4dabf7;
+  border-color: #7950f2;
 
   border-style: dashed;
 
   border-left-width: 5px;
+
+  background: #f7f3ff;
 
 }
 
@@ -1296,6 +2117,28 @@ watch(
 }
 
 
+.badge-external-male {
+
+  border: 1px solid #c4b5fd;
+
+  background: #ede9fe;
+
+  color: #5f3dc4;
+
+}
+
+
+.badge-external-female {
+
+  border: 1px solid #ffc078;
+
+  background: #fff4e8;
+
+  color: #d9480f;
+
+}
+
+
 .badge-dau {
 
   border:
@@ -1313,11 +2156,11 @@ watch(
 
   border:
     1px dashed
-    #4dabf7;
+    #7950f2;
 
-  background: #e7f5ff;
+  background: #f3f0ff;
 
-  color: #1971c2;
+  color: #5f3dc4;
 
 }
 
@@ -1362,7 +2205,7 @@ watch(
 
 .section-title > i {
 
-  color: var(--family-primary);
+  color: #922525;
 
 }
 
@@ -1477,6 +2320,434 @@ watch(
       3,
       minmax(0, 1fr)
     );
+
+}
+
+
+/* ===================================== */
+/* ANCESTOR LINE */
+/* ===================================== */
+
+.ancestor-section {
+
+  overflow: hidden;
+
+}
+
+
+.ancestor-section-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 8px;
+
+}
+
+
+.ancestor-title {
+
+  margin-bottom: 0;
+
+}
+
+
+.view-full-tree {
+
+  flex-shrink: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 7px 11px;
+
+  border:
+    1px solid
+    #ced4da;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #495057;
+
+  font-size: 0.78rem;
+
+  font-weight: 700;
+
+}
+
+
+.view-full-tree:hover {
+
+  border-color: #7950f2;
+
+  color: #5f3dc4;
+
+  background: #faf7ff;
+
+}
+
+
+.ancestor-description {
+
+  margin-bottom: 17px;
+
+  color: #6c757d;
+
+  font-size: 0.82rem;
+
+  line-height: 1.55;
+
+}
+
+
+.ancestor-external-note {
+
+  display: inline-block;
+
+  margin-left: 5px;
+
+  color: #5f3dc4;
+
+  font-weight: 700;
+
+}
+
+
+.ancestor-line {
+
+  width: 100%;
+
+  max-width: 760px;
+
+  margin: 0 auto;
+
+}
+
+
+.ancestor-step {
+
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+}
+
+
+.ancestor-connector {
+
+  height: 43px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #adb5bd;
+
+}
+
+
+.connector-line {
+
+  width: 2px;
+
+  height: 24px;
+
+  background: #ced4da;
+
+}
+
+
+.connector-arrow {
+
+  margin-top: -2px;
+
+  font-size: 10px;
+
+  line-height: 1;
+
+}
+
+
+.ancestor-generation {
+
+  margin-bottom: 6px;
+
+  padding: 3px 9px;
+
+  border-radius: 999px;
+
+  background: #f1f3f5;
+
+  color: #6c757d;
+
+  font-size: 0.66rem;
+
+  font-weight: 850;
+
+  letter-spacing: 0.05em;
+
+}
+
+
+.ancestor-family-row {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  width: 100%;
+
+  padding: 9px;
+
+  border:
+    1px solid
+    transparent;
+
+  border-radius: 13px;
+
+}
+
+
+.ancestor-current-row {
+
+  border-color: #d0bfff;
+
+  background:
+    linear-gradient(
+      90deg,
+      #faf7ff,
+      #fff
+    );
+
+}
+
+
+.ancestor-person-wrap {
+
+  position: relative;
+
+  flex: 0 0 auto;
+
+}
+
+
+.current-person-label {
+
+  position: absolute;
+
+  top: -8px;
+
+  left: 50%;
+
+  z-index: 3;
+
+  transform:
+    translateX(-50%);
+
+  padding: 2px 7px;
+
+  border-radius: 999px;
+
+  background: #5f3dc4;
+
+  color: #ffffff;
+
+  font-size: 0.52rem;
+
+  font-weight: 850;
+
+  letter-spacing: 0.05em;
+
+  white-space: nowrap;
+
+}
+
+
+.ancestor-marriage-link {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  flex: 0 0 auto;
+
+  color: #c92a2a;
+
+}
+
+
+.ancestor-marriage-link
+.marriage-line {
+
+  width: 14px;
+
+  height: 1px;
+
+  background: #ced4da;
+
+}
+
+
+.ancestor-marriage-link
+.heart {
+
+  font-size: 0.8rem;
+
+}
+
+
+.ancestor-spouses {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  flex-wrap: wrap;
+
+}
+
+
+/* ===================================== */
+/* ANCESTOR LINE - MOBILE */
+/* ===================================== */
+
+@media (max-width: 768px) {
+
+  .ancestor-section-header {
+
+    align-items: flex-start;
+
+  }
+
+
+  .view-full-tree {
+
+    padding: 7px 9px;
+
+    font-size: 0.7rem;
+
+  }
+
+
+  .ancestor-description {
+
+    font-size: 0.76rem;
+
+  }
+
+
+  .ancestor-line {
+
+    max-width: 100%;
+
+  }
+
+
+  .ancestor-family-row {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 5px;
+
+    padding:
+      11px 8px;
+
+  }
+
+
+  .ancestor-person-wrap {
+
+    width: 100%;
+
+  }
+
+
+  .ancestor-person-wrap
+  :deep(.person-card) {
+
+    width: 100%;
+
+  }
+
+
+  .ancestor-marriage-link {
+
+    height: 25px;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 1px;
+
+  }
+
+
+  .ancestor-marriage-link
+  .marriage-line {
+
+    width: 1px;
+
+    height: 6px;
+
+  }
+
+
+  .ancestor-spouses {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 6px;
+
+  }
+
+
+  .ancestor-connector {
+
+    height: 38px;
+
+  }
+
+
+  .connector-line {
+
+    height: 20px;
+
+  }
 
 }
 
